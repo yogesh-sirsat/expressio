@@ -1,7 +1,28 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django_resized import ResizedImageField
 from django.db import models
 from django.contrib.auth.models import User
+
+
+class Profile(models.Model):
+    objects = None
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,  null=True)
+    avatar = ResizedImageField(size=(360, 480), upload_to='user_profile/avatar',
+                               default="user_profile/avatar/default_user_avatar.jpg", null=True, blank=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        try:
+            instance.profile.save()
+        except ObjectDoesNotExist:
+            Profile.objects.create(user=instance)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
 
 
 class Category(models.Model):
@@ -14,7 +35,7 @@ class Category(models.Model):
 class Post(models.Model):
     class PostObjects(models.Manager):
         def get_queryset(self):
-            return super().get_queryset() .filter(status='published')
+            return super().get_queryset().filter(status='published')
 
     options = (
         ('draft', 'Draft'),
