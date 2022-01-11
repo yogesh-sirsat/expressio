@@ -6,9 +6,10 @@ from django.views.static import serve
 from main import views
 
 urlpatterns = [
-                  path('', views.index, name='home'),
-                  path('signup', views.sign_up_user, name='sign_up_user'),
-                  path('signin', views.sign_in_user, name='sign_in_user'),
-                  path('api/', include('main.api.urls', namespace='main_api')),
+                path('', views.index, name='home'),
+                path('signup', views.sign_up_user, name='sign_up_user'),
+                path('signin', views.sign_in_user, name='sign_in_user'),
+                path('<str:username>/profile', views.user_profile, name='user_profile'),
+                path('api/', include('main.api.urls', namespace='main_api')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

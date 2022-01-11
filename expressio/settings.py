@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
-
+AUTH_PROFILE_MODULE = 'main.Profile'
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
         messages.INFO: 'alert-info',
@@ -160,7 +160,7 @@ LOGOUT_REDIRECT_URL = 'home'
 
 
 # DJANGO RESIZED Imagefield library defaults
-DJANGORESIZED_DEFAULT_SIZE = [1920, 1080]
+DJANGORESIZED_DEFAULT_SIZE = [1280, 720]
 DJANGORESIZED_DEFAULT_QUALITY = 75
 DJANGORESIZED_DEFAULT_KEEP_META = True
 DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'

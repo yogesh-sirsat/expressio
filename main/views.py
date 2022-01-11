@@ -1,10 +1,12 @@
-from django.http import HttpResponse
-from django.views.generic.edit import CreateView
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.core.files.storage import FileSystemStorage
+from django.shortcuts import render, redirect
+
+from main.forms import UserForm, ProfileForm
+from main.models import Profile
 
 
 def index(request):
@@ -52,5 +54,26 @@ def sign_in_user(request):
         return render(request, 'main_page.html')
 
 
-def profile_update(request):
-    pass
+@login_required
+def user_profile(request, username):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        # user form
+        user_form.first_name = request.POST['first_name']
+        user_form.last_name = request.POST['last_name']
+        user_form.username = request.POST['username']
+        user_form.email = request.POST['email']
+
+        # profile form
+        if request.method == 'FILES':
+            profile_form.avatar = request.FILES['avatar']
+        profile_form.bio = request.POST['bio']
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your Profile Successfully Updated')
+            return redirect('user_profile', user_form.username)
+
+    return render(request, 'user_profile.html', {'username': username})

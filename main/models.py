@@ -8,11 +8,10 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
-    objects = None
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True,  null=True)
-    avatar = ResizedImageField(size=(360, 480), upload_to='user_profile/avatar',
-                               default="user_profile/avatar/default_user_avatar.jpg", null=True, blank=True)
-    bio = models.TextField(max_length=500, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
+                               default="user_profile/avatar/default_user_avatar.jpg")
+    bio = models.TextField(max_length=500, default="")
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -20,9 +19,13 @@ class Profile(models.Model):
             instance.profile.save()
         except ObjectDoesNotExist:
             Profile.objects.create(user=instance)
+        if created:
+            Profile.objects.create(user=instance)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f"{self.user.username}' Profile"
+
+    post_save.connect(create_user_profile, sender=User)
 
 
 class Category(models.Model):
