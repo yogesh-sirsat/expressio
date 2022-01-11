@@ -1,10 +1,13 @@
+import os
+
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.utils.text import slugify
 from django_resized import ResizedImageField
-from django.db import models
-from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
@@ -46,7 +49,7 @@ class Post(models.Model):
     )
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published')
     excerpt = models.TextField(null=True)
@@ -60,7 +63,17 @@ class Post(models.Model):
     PostObjects = PostObjects()  # custom manager
 
     class Meta:
-        ordering = ('-published',)
+        ordering = ('-published', 'title', 'id')
 
     def __str__(self):
         return self.title
+
+    def thumbnail_name(self):
+        return os.path.basename(self.thumbnail.name)
+
+    def save(self, *args, **kwargs):
+        super(Post, self).save(*args, **kwargs)
+        if not self.slug:
+            self.slug = "{}{}{}".format(slugify(self.title), "-", self.id)
+            Post.objects.filter(id=self.id).update(slug=self.slug)
+

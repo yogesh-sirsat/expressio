@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 
-from main.forms import UserForm, ProfileForm
-from main.models import Profile
+from main.forms import UserForm, ProfileForm, PostForm
+from main.models import Profile, Category, Post
 
 
 def index(request):
@@ -73,7 +74,52 @@ def user_profile(request, username):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, 'Your Profile Successfully Updated')
+            messages.success(request, 'Your Profile Is Successfully Updated')
             return redirect('user_profile', user_form.username)
 
     return render(request, 'user_profile.html', {'username': username})
+
+
+@login_required
+def write(request, username):
+    categories = Category.objects.all()
+    post_form = PostForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        post_form.title = request.POST['title']
+        post_form.category = categories.get(id=request.POST['category'])
+        post_form.content = request.POST['content']
+        if request.method == 'FILES':
+            post_form.thumbnail = request.POST['thumbnail']
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.author = request.user
+            post.save()
+
+            messages.success(request, 'Your Post Is Successfully Published')
+            params = {
+                'username': username,
+                'slug': post.slug,
+            }
+            return redirect('write', username)
+        elif not post_form.is_valid():
+            messages.error(request, 'Post Is Invalid')
+
+    context = {
+        'username': username,
+        'categories': categories,
+    }
+
+    return render(request, 'write.html', context)
+
+
+@login_required
+def edit(request, username, slug):
+    categories = Category.objects.all()
+    post = Post.objects.get(slug=slug)
+    context = {
+        'username': username,
+        'categories': categories,
+        'post': post,
+        'slug': slug,
+    }
+    return render(request, 'edit.html', context)

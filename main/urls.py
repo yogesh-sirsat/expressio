@@ -10,6 +10,8 @@ urlpatterns = [
                 path('signup', views.sign_up_user, name='sign_up_user'),
                 path('signin', views.sign_in_user, name='sign_in_user'),
                 path('<str:username>/profile', views.user_profile, name='user_profile'),
+                path('<str:username>/write', views.write, name='write'),
+                path('<str:username>/<str:slug>/edit', views.edit, name='edit'),
                 path('api/', include('main.api.urls', namespace='main_api')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
