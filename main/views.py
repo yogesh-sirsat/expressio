@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils import timezone
 
 from main.forms import UserForm, ProfileForm, PostForm
 from main.models import Profile, Category, Post
@@ -17,6 +19,8 @@ def index(request):
 def sign_up_user(request):
     if request.method == 'POST':
         username = request.POST['username']
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
         email = request.POST['email']
         set_password = request.POST['setPassword']
         confirm_password = request.POST['confirmPassword']
@@ -27,6 +31,8 @@ def sign_up_user(request):
 
         # create the user
         new_user = User.objects.create_user(username, email, set_password)
+        new_user.first_name = firstname
+        new_user.last_name = lastname
         new_user.save()
         login(request, new_user)
         messages.success(request, 'Your account has been created successfully')
@@ -96,11 +102,8 @@ def write(request, username):
             post.save()
 
             messages.success(request, 'Your Post Is Successfully Published')
-            params = {
-                'username': username,
-                'slug': post.slug,
-            }
-            return redirect('write', username)
+
+            return redirect('user_view', request.user.username)
         elif not post_form.is_valid():
             messages.error(request, 'Post Is Invalid')
 
@@ -114,8 +117,28 @@ def write(request, username):
 
 @login_required
 def edit(request, username, slug):
-    categories = Category.objects.all()
     post = Post.objects.get(slug=slug)
+    if request.user != post.author:
+        return redirect(reverse('post_view', kwargs={'username': request.user.username,
+                                                     'slug': post.slug}))
+
+    categories = Category.objects.all()
+    edit_post = PostForm(request.POST, request.FILES, instance=post)
+    if request.method == 'POST':
+        edit_post.title = request.POST['title']
+        edit_post.category = categories.get(id=request.POST['category'])
+        edit_post.content = request.POST['content']
+        if request.method == 'FILES':
+            edit_post.thumbnail = request.POST['thumbnail']
+        if edit_post.is_valid():
+            update_post = edit_post.save(commit=False)
+            update_post.lastEdited = timezone.now()
+            update_post.save()
+
+            messages.success(request, 'Your Post Is Successfully Updated')
+
+            return redirect(reverse('post_view', kwargs={'username': request.user.username,
+                                                         'slug': slug}))
     context = {
         'username': username,
         'categories': categories,
@@ -123,3 +146,23 @@ def edit(request, username, slug):
         'slug': slug,
     }
     return render(request, 'edit.html', context)
+
+
+def post_view(request, username, slug):
+    post = Post.objects.get(slug=slug)
+    author = get_object_or_404(User, username=username)
+    context = {
+        'post': post,
+        'author': author,
+    }
+    return render(request, 'post_view.html', context)
+
+
+def author_view(request, username):
+    author = get_object_or_404(User, username=username)
+    author_posts = Post.objects.filter(author=author)
+    context = {
+        'author_posts': author_posts,
+        'author': author,
+    }
+    return render(request, 'author_view.html', context)
