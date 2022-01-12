@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/author_view.css' %}">
+{% endblock %}
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="author col-md-2 mt-5" id="author">
+                <div class="position-sticky" style="top: 2rem;">
+                    <div class="row">
+                        <div class="col">
+                            <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar" src="/media/{{ author.profile.avatar }}">
+                        </div>
+                        <div class="col">
+                            <h5 class="author-name text-center">
+                                {{ author.first_name|capfirst }} {{ author.last_name|capfirst }}
+                            </h5>
+
+                            <h6 class="author-bio" type="text">{{ author.profile.bio|capfirst }} blah blah and there there computer science student, studying in india</h6>
+
+                        </div>
+                    </div>
+                <div class="col-md-12">
+                    <h6 class="mt-2">2.3K Followers</h6>
+                    <button class="btn btn-sm btn-outline-success mt-2">Following</button>
+                    <button class="btn btn-sm btn-success mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-plus" viewBox="0 0 16 16">
+                            <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z"></path>
+                            <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"></path>
+                        </svg>
+                    </button>
+                </div>
+                    <div class="author-following row mt-2">
+                        <small class="col-md-12">AUTHOR FOLLOWS</small>
+                        <small class="col-md-12">firstname lastname 1</small>
+                        <small class="col-md-12">user 2</small>
+                        <small class="col-md-12">user 3</small>
+                        <small class="col-md-12">user 4</small>
+                        <small class="col-md-12">and 345 more</small>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+            <div class="author-posts col-md-8 mt-5">
+                {% for post in author_posts %}
+                    <div class="post">
+                        <h1>{{ post.title|capfirst }} a lah and there there computer science student, studyi</h1>
+                        <img src="/media/{{ post.thumbnail }}" class="img-fluid" alt="post-{{ post.id }}-thumbnail">
+                        <p>{{ post.content|capfirst }}</p>
+                        <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                    </div>
+                    {% if user == post.author %}
+                        <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
+                    {% endif %}
+                    <br>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block footer %} {% endblock %}
+{% block script %}
+    <script src="{% static 'js/author_view.js' %}"></script>
+{% endblock %}

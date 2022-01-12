@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block title %}
+        Edit | {{ user.username }}
+    {% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="justify-content-center">
+            <div class="row g-5 justify-content-center">
+              <div class="col-md-7 col-lg-8">
+                <form method="POST" enctype="multipart/form-data">
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <label for="title" class="form-label">Title</label>
+                      <input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ post.title }}" required>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="thumbnail" class="form-label">Thumbnail</label>
+                        <br>
+                      <p>Currently: <a href="/media/{{ post.thumbnail }}">{{ post.thumbnail_name }}</a> </p>
+                      <input class="form-control" type="file" id="thumbnail" name="thumbnail" src="/media/{{ post.thumbnail }}" accept="image/*">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" aria-label="category select">
+                          <option selected value="{{ post.category.id }}">{{ post.category.name}}</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="content" class="form-label">Content</label>
+                      <textarea class="form-control" id="content" name="content" rows="15" required>{{ post.content }}</textarea>
+                    </div>
+
+
+                  </div>
+
+                  <hr class="my-4">
+                   {% csrf_token %}
+                  <button class="btn btn-secondary btn-lg" type="submit">Update</button>
+                </form>
+              </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %} {% endblock %}
