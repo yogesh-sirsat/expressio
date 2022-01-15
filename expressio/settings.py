@@ -156,8 +156,6 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGOUT_REDIRECT_URL = 'home'
-
 
 # DJANGO RESIZED Imagefield library defaults
 DJANGORESIZED_DEFAULT_SIZE = [1280, 720]

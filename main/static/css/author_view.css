@@ -5,7 +5,8 @@
 }
 
 .author-name {
-    font-size: larger;
+    font-family: Gill, serif;
+    font-size: x-large;
     font-weight: 600;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -15,10 +16,20 @@
     line-height: 98%;
     color: dimgray;
     font-size: small;
-    font-family: sans-serif,serif;
+    font-family: Times, Times New Roman,sans-serif;
 }
-p { margin-bottom:8px; }
 
 .author-following{
     font-size: small;
+}
+
+.post-title {
+    font-family: Gill, serif;
+    font-weight: bold;
+
+}
+
+.post-content {
+    font-family: Times, Times New Roman , serif;
+    line-height: 1.8rem;
 }

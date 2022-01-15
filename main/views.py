@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from main.forms import UserForm, ProfileForm, PostForm
 from main.models import Profile, Category, Post
@@ -24,10 +26,12 @@ def sign_up_user(request):
         email = request.POST['email']
         set_password = request.POST['setPassword']
         confirm_password = request.POST['confirmPassword']
+        redirect_path = request.POST['next']
+
         # logic
         if set_password != confirm_password:
             messages.warning(request, 'Given passwords did not match')
-            return redirect('home')
+            return HttpResponseRedirect(redirect_path)
 
         # create the user
         new_user = User.objects.create_user(username, email, set_password)
@@ -36,26 +40,29 @@ def sign_up_user(request):
         new_user.save()
         login(request, new_user)
         messages.success(request, 'Your account has been created successfully')
-        return redirect('home')
+        return HttpResponseRedirect(redirect_path)
+
     else:
         return render(request, 'main_page.html')
 
 
 def sign_in_user(request):
+    # redirect_to = request.REQUEST.get('next', '')
     if request.method == 'POST':
         # get the post parameters
         username = request.POST['signInUsername']
         password = request.POST['password']
+        redirect_path = request.POST['next']
 
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, 'You have successfully logged in')
-            return redirect('home')
+            messages.success(request, 'Success')
+            return HttpResponseRedirect(redirect_path)
 
         else:
-            messages.warning(request, ' Username/Password is Wrong ')
-            return redirect('home')
+            messages.warning(request, 'Check Credentials')
+            return HttpResponseRedirect(redirect_path)
 
     else:
         return render(request, 'main_page.html')
@@ -154,6 +161,8 @@ def post_view(request, username, slug):
     context = {
         'post': post,
         'author': author,
+        'total_stars': post.get_totalStars(),
+        'total_saves': post.get_totalSaves()
     }
     return render(request, 'post_view.html', context)
 
@@ -166,3 +175,35 @@ def author_view(request, username):
         'author': author,
     }
     return render(request, 'author_view.html', context)
+
+
+@login_required
+def post_stars(request, username, slug):
+    post_id = request.POST.get('post_id')
+    post = get_object_or_404(Post, id=post_id)
+    if post.stars.filter(id=request.user.id).exists():
+        post.stars.remove(request.user)
+    else:
+        post.stars.add(request.user)
+
+    total_stars = post.get_totalStars()
+
+    return JsonResponse({'total_stars': total_stars})
+
+
+@login_required
+def post_saves(request, username, slug):
+    post_id = request.POST.get('post_id')
+    username = request.user.username
+    post = get_object_or_404(Post, id=post_id)
+    if post.saves.filter(id=request.user.id).exists():
+        post.saves.remove(request.user)
+        status = 'removed'
+    else:
+        post.saves.add(request.user)
+        status = 'added'
+
+    total_saves = post.get_totalSaves()
+
+    return JsonResponse({'post_id': post_id, 'username': username,
+                         'status': status, 'total_saves': total_saves})

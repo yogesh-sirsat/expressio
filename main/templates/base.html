@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
          <!-- Font Awesome CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+
         <title>{% block title %}Expressio{% endblock %}</title>
     </head>
 
@@ -50,7 +52,7 @@
                     <li><a class="dropdown-item" href="/{{ user.username }}">Posts</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                         <div class="dropdown-divider"></div>
-                    <li><a class="dropdown-item" href="logout">Log Out</a></li>
+                    <li><a class="dropdown-item" href="/logout?next={{request.path}}">Log Out</a></li>
                   </ul>
                 </div>
             {% endif %}
@@ -119,11 +121,13 @@
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
 
                         </div>
+                          <div class="form-group">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                          </div>
                    </div>
                     {% csrf_token %}
 
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-dark">Sign Up</button>
                   </div>
                 </form>
@@ -152,11 +156,13 @@
                             <label for="password" class="col-form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-
-                        {% csrf_token %}
+                      <div class="form-group">
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                      </div>
+                      {% csrf_token %}
                    </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a class="nav-link" style="color: gray" href="" data-bs-toggle="modal" data-bs-target="#signUpModal">Get Started</a>
                     <button type="submit" class="btn btn-outline-dark">Sign In</button>
                   </div>
                 </form>
@@ -172,11 +178,47 @@
             <h1>This is footer of main page</h1>
         {% endblock %}
     </footer>
-
+    <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    {% block script %} {% endblock %}
+    <script>
+        //csrf-ready ajax calls
+        // using jQuery
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+    </script>
+    {% block script %}
+
+    {% endblock %}
 
 
 </html>

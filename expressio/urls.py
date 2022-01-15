@@ -22,7 +22,7 @@ from expressio import settings
 
 urlpatterns = [
     path('', include('main.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/manage/dashboard', admin.site.urls),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     re_path(r'^media/(?P<path>.*)$', serve,
             {'document_root': settings.MEDIA_ROOT}),

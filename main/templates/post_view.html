@@ -15,9 +15,9 @@
 
             <div class="author-posts col-md-8 mt-5">
                 <div class="post">
-                    <h1>{{ post.title|capfirst }} a lah and there there computer science student, studyi</h1>
-                    <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4" alt="post-{{ post.id }}-thumbnail">
-                    <p>{{ post.content|capfirst }}</p>
+                    <h1 class="post-title">{{ post.title|capfirst }} a lah and there there computer science student, studyi</h1>
+                    <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                    <h5 class="post-content">{{ post.content|capfirst }}</h5>
                     <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
                 </div>
                 <hr>
@@ -51,24 +51,40 @@
                         </button>
                     </div>
                     <div class="row justify-content-start mt-4">
-                        <div class="col post-response fs-3 text-center">
-                            <i class="bi bi-star"></i>
-                            <p class="post-response">
-                                29
-                            </p>
+                        <div class="col fs-4 text-center" >
+                            {% if user.is_authenticated %}
+                                {% csrf_token %}
+                                <i class="bi bi-star" id="star" value="{{ post.id }}"></i>
+                                <p class="post-response" id="post-response-star">
+                                    {{ total_stars }}
+                                </p>
+                             {% else %}
+                                <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                <p class="post-response">
+                                    {{ total_stars }}
+                                </p>
+                            {% endif %}
                         </div>
                         <div class="col post-response fs-4 text-center">
-                            <i class="bi bi-chat"></i>
+                            <i class="bi bi-chat" id="comment"></i>
                             <p class="post-response">
                                 9
                             </p>
 
                         </div>
                         <div class="col post-response fs-4 text-center">
-                            <i class="bi bi-save"></i>
-                            <p class="post-response">
-                                2
-                            </p>
+                            {% if user.is_authenticated %}
+                                {% csrf_token %}
+                                <i class="bi bi-save" id="save" value="{{ post.id }}"></i>
+                                <p class="post-response" id="post-response-save">
+                                    {{ total_saves }}
+                                </p>
+                             {% else %}
+                                <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                <p class="post-response">
+                                    {{ total_saves }}
+                                </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -79,3 +95,6 @@
     </div>
 {% endblock %}
 {% block footer %}{% endblock %}
+{% block script %}
+    <script src="{% static 'js/post_response.js' %}"></script>
+{% endblock %}

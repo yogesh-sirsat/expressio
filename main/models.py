@@ -15,9 +15,11 @@ class Profile(models.Model):
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
+    following = models.ManyToManyField(User, related_name='user_following', null=True)
+    followers = models.ManyToManyField(User, related_name='user_followers', null=True)
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(self, instance, created, **kwargs):
         try:
             instance.profile.save()
         except ObjectDoesNotExist:
@@ -29,6 +31,12 @@ class Profile(models.Model):
         return f"{self.user.username}' Profile"
 
     post_save.connect(create_user_profile, sender=User)
+
+    def get_totalFollowing(self):
+        return self.following.count()
+
+    def get_totalFollowers(self):
+        return self.followers.count()
 
 
 class Category(models.Model):
@@ -58,7 +66,8 @@ class Post(models.Model):
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')
     thumbnail = ResizedImageField(size=(720, 1280), upload_to='posts/thumbnails', default="", blank=True, null=True)
-    claps = models.IntegerField(default=0)
+    stars = models.ManyToManyField(User, related_name='post_stars', null=True)
+    saves = models.ManyToManyField(User, related_name='post_saves', null=True)
     objects = models.Manager()  # default manager
     PostObjects = PostObjects()  # custom manager
 
@@ -68,6 +77,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_totalStars(self):
+        return self.stars.count()
+
+    def get_totalSaves(self):
+        return self.saves.count()
+
     def thumbnail_name(self):
         return os.path.basename(self.thumbnail.name)
 
@@ -76,4 +91,3 @@ class Post(models.Model):
         if not self.slug:
             self.slug = "{}{}{}".format(slugify(self.title), "-", self.id)
             Post.objects.filter(id=self.id).update(slug=self.slug)
-

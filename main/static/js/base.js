@@ -1,5 +1,6 @@
 
 $(document).ready(function () {
+
     $('#confirmPassword').on('input', function () {
         let setPassword = $('#setPassword').val(),
             confirmPassword = $(this).val();
