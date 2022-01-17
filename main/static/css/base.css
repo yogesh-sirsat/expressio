@@ -8,3 +8,10 @@
             left: 50%;
             transform: translatex(-50%);
 }
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+.btn{
+	box-shadow: none !important
+}

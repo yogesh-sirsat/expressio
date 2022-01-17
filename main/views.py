@@ -54,7 +54,7 @@ def sign_in_user(request):
         password = request.POST['password']
         redirect_path = request.POST['next']
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             messages.success(request, 'Success')
@@ -158,9 +158,28 @@ def edit(request, username, slug):
 def post_view(request, username, slug):
     post = Post.objects.get(slug=slug)
     author = get_object_or_404(User, username=username)
+    user = request.user
+    follow_author_status = 'notFollowed'
+    subscribe_author_status = 'notSubscribed'
+    star_post_status = 'notStarred'
+    save_post_satus = 'notSaved'
+
+    if author.profile.followers.filter(id=user.id).exists():
+        follow_author_status = 'followed'
+    if author.profile.subscribers.filter(id=user.id).exists():
+        subscribe_author_status = 'subscribed'
+    if post.stars.filter(id=user.id).exists():
+        star_post_status = 'starred'
+    if post.saves.filter(id=user.id).exists():
+        save_post_satus = 'saved'
+
     context = {
         'post': post,
         'author': author,
+        'follow_author_status': follow_author_status,
+        'subscribe_author_status': subscribe_author_status,
+        'star_post_status': star_post_status,
+        'save_post_satus': save_post_satus,
         'total_stars': post.get_totalStars(),
         'total_saves': post.get_totalSaves()
     }
@@ -169,7 +188,7 @@ def post_view(request, username, slug):
 
 def author_view(request, username):
     author = get_object_or_404(User, username=username)
-    author_posts = Post.objects.filter(author=author)
+    author_posts = author.posts.all()
     context = {
         'author_posts': author_posts,
         'author': author,
@@ -178,7 +197,7 @@ def author_view(request, username):
 
 
 @login_required
-def post_stars(request, username, slug):
+def star_post(request, username, slug):
     post_id = request.POST.get('post_id')
     post = get_object_or_404(Post, id=post_id)
     if post.stars.filter(id=request.user.id).exists():
@@ -192,18 +211,45 @@ def post_stars(request, username, slug):
 
 
 @login_required
-def post_saves(request, username, slug):
+def save_post(request, username, slug):
     post_id = request.POST.get('post_id')
-    username = request.user.username
     post = get_object_or_404(Post, id=post_id)
     if post.saves.filter(id=request.user.id).exists():
         post.saves.remove(request.user)
-        status = 'removed'
     else:
         post.saves.add(request.user)
-        status = 'added'
 
     total_saves = post.get_totalSaves()
 
+    return JsonResponse({'total_saves': total_saves})
+
+
+@login_required
+def follow_author(request, username):
+    post_id = request.POST.get('post_id')
+    post = get_object_or_404(Post, id=post_id)
+    author = post.author
+    if author.profile.followers.filter(id=request.user.id).exists():
+        author.profile.followers.remove(request.user)
+    else:
+        author.profile.followers.add(request.user)
+
+    author_followers = author.profile.followers.count()
+
+    return JsonResponse({'author_followers': author_followers})
+
+
+def subscribe_author(request, username):
+    post_id = request.POST.get('post_id')
+    status = 'test'
+    post = get_object_or_404(Post, id=post_id)
+    author = post.author
+    if author.profile.subscribers.filter(id=request.user.id).exists():
+        author.profile.subscribers.remove(request.user)
+        status = 'removed'
+    else:
+        author.profile.subscribers.add(request.user)
+        status = 'added'
+
     return JsonResponse({'post_id': post_id, 'username': username,
-                         'status': status, 'total_saves': total_saves})
+                         'status': status} )

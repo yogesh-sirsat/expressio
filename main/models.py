@@ -15,11 +15,12 @@ class Profile(models.Model):
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
-    following = models.ManyToManyField(User, related_name='user_following', null=True)
-    followers = models.ManyToManyField(User, related_name='user_followers', null=True)
+    following = models.ManyToManyField(User, related_name='user_following')
+    followers = models.ManyToManyField(User, related_name='user_followers')
+    subscribers = models.ManyToManyField(User, related_name='user_subscribers')
 
     @receiver(post_save, sender=User)
-    def create_user_profile(self, instance, created, **kwargs):
+    def create_user_profile(sender, instance, created, **kwargs):
         try:
             instance.profile.save()
         except ObjectDoesNotExist:
@@ -57,7 +58,7 @@ class Post(models.Model):
     )
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published')
     excerpt = models.TextField(null=True)
@@ -66,8 +67,8 @@ class Post(models.Model):
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')
     thumbnail = ResizedImageField(size=(720, 1280), upload_to='posts/thumbnails', default="", blank=True, null=True)
-    stars = models.ManyToManyField(User, related_name='post_stars', null=True)
-    saves = models.ManyToManyField(User, related_name='post_saves', null=True)
+    stars = models.ManyToManyField(User, related_name='post_stars')
+    saves = models.ManyToManyField(User, related_name='post_saves')
     objects = models.Manager()  # default manager
     PostObjects = PostObjects()  # custom manager
 

@@ -15,8 +15,10 @@ urlpatterns = [
                 path('<str:username>/write', views.write, name='write'),
                 path('<str:username>/<slug:slug>/edit', views.edit, name='edit'),
                 path('<str:username>/<slug:slug>', views.post_view, name='post_view'),
-                path('<str:username>/<slug:slug>/post-stars', views.post_stars, name='post_stars'),
-                path('<str:username>/<slug:slug>/post-saves', views.post_saves, name='post_saves'),
+                path('<str:username>/<slug:slug>/star-post', views.star_post, name='star_post'),
+                path('<str:username>/<slug:slug>/save-post', views.save_post, name='save_post'),
+                path('<str:username>/author-view/follow-author', views.follow_author, name='follow_author'),
+                path('<str:username>/author-view/subscribe-author', views.subscribe_author, name='subscribe_author'),
                 path('api/', include('main.api.urls', namespace='main_api')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
