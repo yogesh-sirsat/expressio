@@ -15,9 +15,9 @@ class Profile(models.Model):
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
-    following = models.ManyToManyField(User, related_name='user_following')
-    followers = models.ManyToManyField(User, related_name='user_followers')
-    subscribers = models.ManyToManyField(User, related_name='user_subscribers')
+    following = models.ManyToManyField(User, related_name='user_following', blank=True)
+    followers = models.ManyToManyField(User, related_name='user_followers', blank=True)
+    subscribers = models.ManyToManyField(User, related_name='user_subscribers', blank=True)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

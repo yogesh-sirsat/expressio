@@ -189,9 +189,20 @@ def post_view(request, username, slug):
 def author_view(request, username):
     author = get_object_or_404(User, username=username)
     author_posts = author.posts.all()
+    user = request.user
+
+    follow_author_status = 'notFollowed'
+    subscribe_author_status = 'notSubscribed'
+
+    if author.profile.followers.filter(id=user.id).exists():
+        follow_author_status = 'followed'
+    if author.profile.subscribers.filter(id=user.id).exists():
+        subscribe_author_status = 'subscribed'
     context = {
         'author_posts': author_posts,
         'author': author,
+        'follow_author_status': follow_author_status,
+        'subscribe_author_status': subscribe_author_status,
     }
     return render(request, 'author_view.html', context)
 
@@ -226,13 +237,15 @@ def save_post(request, username, slug):
 
 @login_required
 def follow_author(request, username):
-    post_id = request.POST.get('post_id')
-    post = get_object_or_404(Post, id=post_id)
-    author = post.author
-    if author.profile.followers.filter(id=request.user.id).exists():
-        author.profile.followers.remove(request.user)
+    author_username = request.POST.get('author_username')
+    author = User.objects.get(username=author_username)
+    user = request.user
+    if author.profile.followers.filter(id=user.id).exists():
+        author.profile.followers.remove(user)
+        user.profile.following.remove(author)
     else:
-        author.profile.followers.add(request.user)
+        author.profile.followers.add(user)
+        user.profile.following.add(author)
 
     author_followers = author.profile.followers.count()
 
@@ -240,16 +253,11 @@ def follow_author(request, username):
 
 
 def subscribe_author(request, username):
-    post_id = request.POST.get('post_id')
-    status = 'test'
-    post = get_object_or_404(Post, id=post_id)
-    author = post.author
+    author_username = request.POST.get('author_username')
+    author = User.objects.get(username=author_username)
     if author.profile.subscribers.filter(id=request.user.id).exists():
         author.profile.subscribers.remove(request.user)
-        status = 'removed'
     else:
         author.profile.subscribers.add(request.user)
-        status = 'added'
 
-    return JsonResponse({'post_id': post_id, 'username': username,
-                         'status': status} )
+    return JsonResponse({'username': username})

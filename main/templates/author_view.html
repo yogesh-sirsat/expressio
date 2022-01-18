@@ -9,8 +9,10 @@
 
 {% block body %}
     <div class="container">
+        {% include "includes/user_followers.html" %}
+        {% include "includes/user_following.html" %}
         <div class="row">
-            <div class="author col-md-2 mt-5" id="author">
+            <div class="author col-md-2 mt-5" id="author" value="{{ author.username }}">
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="row">
                         <div class="col">
@@ -26,41 +28,61 @@
                         </div>
                     </div>
                 <div class="col-md-12">
-                    <h6 class="mt-2">2.3K Followers</h6>
-                    <button class="btn btn-sm btn-outline-success mt-2">Following</button>
-                    <button class="btn btn-sm btn-success mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-plus" viewBox="0 0 16 16">
-                            <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z"></path>
-                            <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"></path>
-                        </svg>
-                    </button>
+                    <h6 type="button" class="mt-2" id="author-following" data-bs-toggle="modal" data-bs-target="#authorFollowingModal">{{ author.profile.following.count }} Following</h6>
                 </div>
-                    <div class="author-following row mt-2">
-                        <small class="col-md-12">AUTHOR FOLLOWS</small>
-                        <small class="col-md-12">firstname lastname 1</small>
-                        <small class="col-md-12">user 2</small>
-                        <small class="col-md-12">user 3</small>
-                        <small class="col-md-12">user 4</small>
-                        <small class="col-md-12">and 345 more</small>
-                    </div>
+                <div class="col-md-12">
+                    <h6 type="button" class="mt-2" id="author-followers" data-bs-toggle="modal" data-bs-target="#authorFollowersModal">{{ author.profile.followers.count }} Followers</h6>
+                        {% if user.is_authenticated %}
+                            {% if author == request.user %}
+                                <button class="btn btn-sm btn-success mt-2" disabled>
+                                Follow</button>
+                                <button class="btn btn-sm btn-success mt-2" disabled>
+                                    <i class="bi-envelope-check"></i>
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-success mt-2" id="follow-author" value="{{ follow_author_status }}">
+                                    Follow</button>
+                                <button class="btn btn-sm btn-success mt-2" id="subscribe-author" value="{{ subscribe_author_status }}">
+                                    <i class="bi-envelope-check"></i>
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
+                            Follow</button>
+                            <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-envelope-check" viewBox="0 0 16 16">
+                                    <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z"></path>
+                                    <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"></path>
+                                </svg>
+                            </button>
+                        {% endif %}
+                </div>
                     <hr>
                 </div>
 
             </div>
             <div class="author-posts col-md-8 mt-5">
-                {% for post in author_posts %}
+                {% if author_posts.count == 0 %}
                     <div class="post">
-                        <h2 class="post-title">{{ post.title|capfirst }} a lah and there there computer science student, studyi</h2>
-                        <img src="/media/{{ post.thumbnail }}" class="img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
-                        <h5 class="post-content">{{ post.content|capfirst|slice:"0:450" }} . . .</h5>
-                        <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                        <h1 class="post-title">None Posts Published</h1>
                     </div>
-                    {% if user == post.author %}
-                        <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
-                    {% endif %}
-                    <br>
-                    <hr>
-                {% endfor %}
+                {% else %}
+                    {% for post in author_posts %}
+                        <div class="post">
+                            <h2 class="post-title">{{ post.title|capfirst }} a lah and there there computer science student, studyi</h2>
+                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            <h5 class="post-content">{{ post.content|capfirst|slice:"0:450" }} . . .</h5>
+                            <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                        </div>
+                        {% if user == post.author %}
+                            <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
+                        {% endif %}
+                        <br>
+                        <hr>
+                    {% endfor %}
+                {% endif %}
+
             </div>
         </div>
 
@@ -69,4 +91,5 @@
 {% block footer %} {% endblock %}
 {% block script %}
     <script src="{% static 'js/author_view.js' %}"></script>
+    <script src="{% static 'js/post_response.js' %}"></script>
 {% endblock %}

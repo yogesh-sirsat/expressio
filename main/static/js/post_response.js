@@ -31,6 +31,15 @@ $(document).ready(function (){
         savePost.addClass('bi-save-fill');
     }
 
+//redirect to author view when click on author name | author avatar
+    $("#author-name").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
+    $("#author-avatar").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
 //follow and unfollow author frontEnd section
     $(document).on('click', '#follow-author',function(event){
         event.preventDefault();
@@ -39,7 +48,9 @@ $(document).ready(function (){
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: dataForResponse,
+            data: {
+                'author_username': authorUsername,
+            },
             action: 'post',
             dataType: 'json',
 
@@ -79,7 +90,9 @@ $(document).ready(function (){
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: dataForResponse,
+            data: {
+                'author_username': authorUsername,
+            },
             action: 'post',
             dataType: 'json',
 

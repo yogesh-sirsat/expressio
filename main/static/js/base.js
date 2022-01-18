@@ -37,6 +37,14 @@ $(document).ready(function () {
         }
     });
 
-
+//redirect to author view when click on username | user avatar
+    $(".user-name").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
+    $(".user-avatar").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
 
 });

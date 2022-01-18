@@ -45,11 +45,11 @@
             </form>
             {% if user.is_authenticated %}
                 <div class="nav-item dropdown">
-                    <img class="rounded-circle dropdown-toggle" alt="user-profile" src="/media/{{ user.profile.avatar }}" height="32" width="32"
+                    <img class="rounded-circle dropdown-toggle" alt="user-profile" src="/media/{{ user.profile.avatar }}" height="36" width="36"
                          data-holder-rendered="true" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                    <li><a class="dropdown-item" href="/{{ user.username }}/profile">Profile</a></li>
-                    <li><a class="dropdown-item" href="/{{ user.username }}">Posts</a></li>
+                    <li><a class="dropdown-item" href="/{{ user.username }}/profile">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="/{{ user.username }}">Profile View</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                         <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="/logout?next={{request.path}}">Log Out</a></li>
@@ -179,6 +179,7 @@
         {% endblock %}
     </footer>
     <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
     <script>
