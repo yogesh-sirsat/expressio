@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.loader import render_to_string
@@ -14,8 +15,29 @@ from main.forms import UserForm, ProfileForm, PostForm
 from main.models import Profile, Category, Post
 
 
-def index(request):
-    return render(request, 'main_page.html')
+def home(request):
+    all_posts = Post.objects.all()
+    user = request.user
+
+    # for the future pending work
+    # all_posts_paginator = Paginator(all_posts, 2)
+    # following_authors_posts_paginator = Paginator(following_authors_posts,2)
+    #
+    # gp_page_number = request.GET.get('gp-page')
+    # fp_page_number = request.GET.get('fp-page')
+    #
+    # all_posts = all_posts_paginator.get_page(gp_page_number)
+    # following_authors_posts = following_authors_posts_paginator.get_page(fp_page_number)
+
+    context = {
+        'all_posts': all_posts,
+    }
+
+    if request.user.is_authenticated:
+        following_authors_posts = Post.objects.filter(author__in=user.profile.following.all())
+        context['following_authors_posts'] = following_authors_posts
+
+    return render(request, 'main_page.html', context)
 
 
 def sign_up_user(request):

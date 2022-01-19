@@ -47,4 +47,10 @@ $(document).ready(function () {
         return false;
     });
 
+//redirect to post view when click on post title | thumbnail
+    $(".post").click(function() {
+      window.location = $(this).find("a").attr("href");
+      return false;
+    });
+
 });

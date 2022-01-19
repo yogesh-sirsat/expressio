@@ -23,7 +23,7 @@
                                 {{ author.first_name|capfirst }} {{ author.last_name|capfirst }}
                             </h5>
 
-                            <h6 class="author-bio" type="text">{{ author.profile.bio|capfirst }} blah blah and there there computer science student, studying in india</h6>
+                            <h6 class="author-bio" type="text">{{ author.profile.bio|title }} blah blah and there there computer science student, studying in india</h6>
 
                         </div>
                     </div>
@@ -70,9 +70,9 @@
                 {% else %}
                     {% for post in author_posts %}
                         <div class="post">
-                            <h2 class="post-title">{{ post.title|capfirst }} a lah and there there computer science student, studyi</h2>
+                            <h2 class="post-title">{{ post.title|title }} a lah and there there computer science student, studyi</h2>
                             <img src="/media/{{ post.thumbnail }}" class="img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
-                            <h5 class="post-content">{{ post.content|capfirst|slice:"0:450" }} . . .</h5>
+                            <h5 class="post-content mt-2">{{ post.content|capfirst|slice:"0:450" }} . . .</h5>
                             <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
                         </div>
                         {% if user == post.author %}

@@ -6,7 +6,7 @@ from django.views.static import serve
 from main import views
 
 urlpatterns = [
-                path('', views.index, name='home'),
+                path('', views.home, name='home'),
                 path('signup', views.sign_up_user, name='sign_up_user'),
                 path('signin', views.sign_in_user, name='sign_in_user'),
                 path('logout', auth_views.LogoutView.as_view(), name='logout'),

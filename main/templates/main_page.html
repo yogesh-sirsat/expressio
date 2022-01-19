@@ -2,24 +2,172 @@
 {% block body %}
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="following-authors-posts-tab" data-bs-toggle="tab" data-bs-target="#following-authors-posts" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
+                        {% if user.is_authenticated %}
+                            <button class="nav-link" id="following-authors-posts-tab" data-bs-toggle="tab" data-bs-target="#following-authors-posts" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
+                        {% else %}
+                            <button class="nav-link" data-bs-toggle="modal" data-bs-target="#signInModal" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
+                        {% endif %}
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="global-posts-tab" data-bs-toggle="tab" data-bs-target="#global-posts" type="button" role="tab" aria-controls="global-posts" aria-selected="true">Profile</button>
+                        <button class="nav-link active" id="global-posts-tab" data-bs-toggle="tab" data-bs-target="#global-posts" type="button" role="tab" aria-controls="global-posts" aria-selected="true">Global</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade" id="following-authors-posts" role="tabpanel" aria-labelledby="following-authors-posts-tab">...</div>
-                  <div class="tab-pane fade show active" id="global-posts" role="tabpanel" aria-labelledby="global-posts-tab">...</div>
+                    <div class="tab-pane fade show active mt-2" id="global-posts" role="tabpanel" aria-labelledby="global-posts-tab">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for post in all_posts %}
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <div class="post">
+                                            <img src="/media/{{ post.thumbnail }}" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+                                            <div class="card-body">
+                                                <h5 class="card-title post-title">{{ post.title|title }} A Lah And There There Computer Science Student, Studyi</h5>
+                                                <p class="card-text post-content">{{ post.content|capfirst|slice:"0:320" }} . . .</p>
+                                                <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer" style="background-color: white">
+                      {# Post Star and Save Status Section #}
+
+                                            <div class="row justify-content-start">
+                                                <div class="col-2 fs-6" >
+                                                    {% if user.is_authenticated %}
+                                                        {% csrf_token %}
+                                                        <i class="bi bi-star" id="star" value="{{ star_post_status }}"></i>
+                                                        <small class="post-response" id="post-response-star">
+                                                            {{ post.get_totalStars }}
+                                                        </small>
+                                                     {% else %}
+                                                        <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                                        <small class="post-response">
+                                                            {{ post.get_totalStars }}
+                                                        </small>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-2 post-response fs-6">
+                                                    {% if user.is_authenticated %}
+                                                        {% csrf_token %}
+                                                        <i class="bi bi-save" id="save" value="{{ save_post_satus }}"></i>
+                                                        <small class="post-response" id="post-response-save">
+                                                            {{ post.get_totalSaves }}
+                                                        </small>
+                                                     {% else %}
+                                                        <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                                        <small class="post-response">
+                                                            {{ post.get_totalSaves }}
+                                                        </small>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {# For the future pending use #}
+                        {#                    <div class="pagination">#}
+                        {#                        <span class="step-links">#}
+                        {#                            {% if all_posts.has_previous %}#}
+                        {#                                <a href="?gp-page=1">&laquo; first</a>#}
+                        {#                                <a href="?gp-page={{ all_posts.previous_page_number }}">previous</a>#}
+                        {#                            {% endif %}#}
+                        {##}
+                        {#                            <span class="current">#}
+                        {#                                Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}.#}
+                        {#                            </span>#}
+                        {##}
+                        {#                            {% if all_posts.has_next %}#}
+                        {#                                <a href="?gp-page={{ all_posts.next_page_number }}">next</a>#}
+                        {#                                <a href="?gp-page={{ all_posts.paginator.num_pages }}">last &raquo;</a>#}
+                        {#                            {% endif %}#}
+                        {#                        </span>#}
+                        {#                    </div>#}
+                    </div>
+                    <div class="tab-pane fade mt-2" id="following-authors-posts" role="tabpanel" aria-labelledby="following-authors-posts-tab">
+                  {% if following_authors_posts.count == 0 %}
+                      <h2 class="post-title">Nothing To Show Here For Now, Follow More Authors Or Come Again Later</h2>
+                  {% else %}
+                      <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for post in following_authors_posts %}
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <div class="post">
+                                            <img src="/media/{{ post.thumbnail }}" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+                                            <div class="card-body">
+                                                <h5 class="card-title post-title">{{ post.title|title }} A Lah And There There Computer Science Student, Studyi</h5>
+                                                <p class="card-text post-content">{{ post.content|capfirst|slice:"0:320" }} . . .</p>
+                                                <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer" style="background-color: white">
+                      {# Post Star and Save Status Section #}
+
+                                            <div class="row justify-content-start">
+                                                <div class="col-2 fs-6" >
+                                                    {% if user.is_authenticated %}
+                                                        {% csrf_token %}
+                                                        <i class="bi bi-star" id="star" value="{{ star_post_status }}"></i>
+                                                        <small class="post-response" id="post-response-star">
+                                                            {{ post.get_totalStars }}
+                                                        </small>
+                                                     {% else %}
+                                                        <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                                        <small class="post-response">
+                                                            {{ post.get_totalStars }}
+                                                        </small>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-2 post-response fs-6">
+                                                    {% if user.is_authenticated %}
+                                                        {% csrf_token %}
+                                                        <i class="bi bi-save" id="save" value="{{ save_post_satus }}"></i>
+                                                        <small class="post-response" id="post-response-save">
+                                                            {{ post.get_totalSaves }}
+                                                        </small>
+                                                     {% else %}
+                                                        <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                                        <small class="post-response">
+                                                            {{ post.get_totalSaves }}
+                                                        </small>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                  {% endif %}
+{# For the future pending use #}
+{#                      <div class="pagination">#}
+{#                            <span class="step-links">#}
+{#                                {% if following_authors_posts.has_previous %}#}
+{#                                    <a href="?fp-page=1">&laquo; first</a>#}
+{#                                    <a href="?fp-page={{ following_authors_posts.previous_page_number }}">previous</a>#}
+{#                                {% endif %}#}
+{##}
+{#                                <span class="current">#}
+{#                                    Page {{ following_authors_posts.number }} of {{ following_authors_posts.paginator.num_pages }}.#}
+{#                                </span>#}
+{##}
+{#                                {% if following_authors_posts.has_next %}#}
+{#                                    <a href="?fp-page={{ following_authors_posts.next_page_number }}">next</a>#}
+{#                                    <a href="?fp-page={{ following_authors_posts.paginator.num_pages }}">last &raquo;</a>#}
+{#                                {% endif %}#}
+{#                            </span>#}
+{#                       </div>#}
+                  </div>
                 </div>
             </div>
             <div class="col-md-2">
-                <h3>SIDEBAR</h3>
+                <h3>SIDEBARSIDEBAR</h3>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block footer %}{% endblock %}
+{% block script %}
+{% endblock %}

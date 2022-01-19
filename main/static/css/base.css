@@ -15,3 +15,12 @@
 .btn{
 	box-shadow: none !important
 }
+.post-title {
+    font-family: Times, Times New Roman , serif;
+    font-weight: bold;
+
+}
+
+.post-content {
+    font-family: Times, Times New Roman , serif;
+}

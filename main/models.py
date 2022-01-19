@@ -66,9 +66,9 @@ class Post(models.Model):
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')
-    thumbnail = ResizedImageField(size=(720, 1280), upload_to='posts/thumbnails', default="", blank=True, null=True)
-    stars = models.ManyToManyField(User, related_name='post_stars')
-    saves = models.ManyToManyField(User, related_name='post_saves')
+    thumbnail = ResizedImageField(size=(480, 720), upload_to='posts/thumbnails', default="", blank=True, null=True)
+    stars = models.ManyToManyField(User, related_name='post_stars', blank=True)
+    saves = models.ManyToManyField(User, related_name='post_saves', blank=True)
     objects = models.Manager()  # default manager
     PostObjects = PostObjects()  # custom manager
 
