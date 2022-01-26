@@ -232,29 +232,51 @@ def author_view(request, username):
 @login_required
 def star_post(request, username, slug):
     post_id = request.POST.get('post_id')
+    user_response = request.POST.get('response')
+
     post = get_object_or_404(Post, id=post_id)
+    
     if post.stars.filter(id=request.user.id).exists():
-        post.stars.remove(request.user)
+        if(user_response == 'clicked'):
+            post.stars.remove(request.user)
+            status = 'notStarred'
+        else:
+            status = 'starred'    
     else:
-        post.stars.add(request.user)
+        if(user_response == 'clicked'):
+            post.stars.add(request.user)
+            status = 'starred'
+        else:
+            status = 'notStarred'    
 
     total_stars = post.get_totalStars()
 
-    return JsonResponse({'total_stars': total_stars})
+    return JsonResponse({'total_stars': total_stars, 'star_post_status':status})
 
 
 @login_required
 def save_post(request, username, slug):
     post_id = request.POST.get('post_id')
+    user_response = request.POST.get('response')
+
     post = get_object_or_404(Post, id=post_id)
+
     if post.saves.filter(id=request.user.id).exists():
-        post.saves.remove(request.user)
+        if(user_response == 'clicked'):
+            post.saves.remove(request.user)
+            status = 'notSaved'
+        else:
+            status = 'saved'    
     else:
-        post.saves.add(request.user)
+        if(user_response == 'clicked'):
+            post.saves.add(request.user)
+            status = 'saved'
+        else:
+            status = 'notSaved'    
 
     total_saves = post.get_totalSaves()
 
-    return JsonResponse({'total_saves': total_saves})
+    return JsonResponse({'total_saves': total_saves, 'save_post_status': status})
 
 
 @login_required

@@ -1,0 +1,28 @@
+<!-- Modal -->
+<div class="modal fade" id="authorFollowingModal" tabindex="-1" aria-labelledby="authorFollowingModal" aria-hidden="true">
+ <!-- Scrollable modal -->
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> {{ author.username}}'s Following </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="container">
+              <div class="row justify-content-start">
+                {% for user in author.profile.following.all %}
+                    <div class="col-2 ">
+                        <img class="rounded-circle user-avatar" alt="user-avatar" src="/media/{{ user.profile.avatar }}" height="36" width="36"
+                             data-holder-rendered="true" href="/{{ user.username }}">
+                    </div>
+                    <div class="col-10">
+                        <h6 type="button" class="user-name" href="/{{ user.username }}">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h6>
+                    </div>
+                <hr class="mb-2 mt-2">
+                {% endfor %}
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

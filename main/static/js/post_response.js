@@ -2,11 +2,10 @@
 $(document).ready(function (){
     let followAuthor = $('#follow-author');
     let subscribeAuthor = $('#subscribe-author');
-    let starPost = $('#star');
-    let savePost = $('#save');
+    let starPost = $('.star-post');
+    let savePost = $('.save-post');
     let windowLocationHref = window.location.href;
-    let post_id = $('#postContainer').attr('postId');
-    let dataForResponse = {'post_id': post_id}, authorUsername = $('#author').attr('value');
+    let authorUsername = $('#author').attr('value');
 
     if(followAuthor.attr('value') === 'followed'){
         followAuthor.removeClass('btn-success');
@@ -21,15 +20,69 @@ $(document).ready(function (){
         $(this).children('i').addClass('bi-envelope-check')
     }
 
-    if(starPost.attr('value') === 'starred'){
-        starPost.removeClass('bi-star');
-        starPost.addClass('bi-star-fill');
-    }
+//changing class of star icon as current user starred or not to posts    
+    $('.star-post').each(function(){
+        let endpoint = $(this).attr('href'), thisElement= $(this);
+        let post_id = thisElement.parent().parent().attr('postId');
 
-    if(savePost.attr('value') === 'saved'){
-        savePost.removeClass('bi-save');
-        savePost.addClass('bi-save-fill');
-    }
+        $.ajax({
+            type: 'POST',
+            url: endpoint,
+            data: {'post_id': post_id, 'response': 'none'},
+            action: 'post',
+            dataType: 'json',
+
+            success: function(json) {
+                if(json['star_post_status'] === 'starred'){
+                    if(thisElement.hasClass('bi-star')){
+                        thisElement.removeClass('bi-star');
+                        thisElement.addClass('bi-star-fill');
+                    }
+                }
+
+            },
+            error: function(xhr, errmsg, err) {
+                console.log('error')
+                console.log(xhr)
+                console.log(errmsg)
+                console.log(err)
+            }
+
+        });
+
+    });
+
+//changing class of save icon as current user saved or not to posts    
+    $('.save-post').each(function(){
+        let endpoint = $(this).attr('href'), thisElement= $(this);
+        let post_id = thisElement.parent().parent().attr('postId');
+
+        $.ajax({
+            type: 'POST',
+            url: endpoint,
+            data: {'post_id': post_id, 'response': 'none'},
+            action: 'post',
+            dataType: 'json',
+
+            success: function(json) {
+                if(json['save_post_status'] === 'saved'){
+                    if(thisElement.hasClass('bi-save')){
+                        thisElement.removeClass('bi-save');
+                        thisElement.addClass('bi-save-fill');
+                    }
+                }
+
+            },
+            error: function(xhr, errmsg, err) {
+                console.log('error')
+                console.log(xhr)
+                console.log(errmsg)
+                console.log(err)
+            }
+
+        });
+
+    });
 
 //redirect to author view when click on author name | author avatar
     $("#author-name").click(function() {
@@ -127,20 +180,22 @@ $(document).ready(function (){
 
 //star and unstar post frontEnd section
 
-    $(document).on('click', '#star',function(event){
+    $(document).on('click', '.star-post',function(event){
         event.preventDefault();
 
-        let endpoint = windowLocationHref + '/star-post'
+        let post_id = $(this).parent().parent().attr('postId');
+        let endpoint = $(this).attr('href'), thisElement= $(this);
+
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: dataForResponse,
+            data: {'post_id': post_id, 'response': 'clicked',},
             action: 'post',
             dataType: 'json',
 
             success: function(json) {
-                let total_stars = document.getElementById('post-response-star')
-                total_stars.innerHTML = json['total_stars']
+                thisElement.next().text(json['total_stars']);
+                console.log(json);
 
             },
             error: function(xhr, errmsg, err) {
@@ -165,19 +220,20 @@ $(document).ready(function (){
 
 //save and unsaved post frontEnd section
 
-    $(document).on('click', '#save',function(event){
+    $(document).on('click', '.save-post',function(event){
         event.preventDefault();
-        let endpoint = windowLocationHref + '/save-post'
+        let endpoint = $(this).attr('href'),thisElement= $(this);
+        let post_id = thisElement.parent().parent().attr('postId')
+
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: dataForResponse,
+            data: {'post_id': post_id, 'response': 'clicked'},
             action: 'post',
             dataType: 'json',
 
             success: function(json) {
-                let total_saves = document.getElementById('post-response-save')
-                total_saves.innerHTML = json['total_saves']
+                thisElement.next().text(json['total_saves']);
 
             },
             error: function(xhr, errmsg, err) {
@@ -188,14 +244,16 @@ $(document).ready(function (){
             }
 
         });
-
+        
         if($(this).hasClass('bi-save')){
             $(this).removeClass('bi-save');
             $(this).addClass('bi-save-fill');
+
         }
         else{
             $(this).removeClass('bi-save-fill');
             $(this).addClass('bi-save')
+
         }
 
     });

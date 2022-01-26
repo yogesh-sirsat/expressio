@@ -62,10 +62,10 @@
                 </div>
 
             </div>
-            <div class="author-posts col-md-8 mt-5">
+            <div class="author-posts col-md-8 mt-2">
                 {% if author_posts.count == 0 %}
                     <div class="post">
-                        <h1 class="post-title">None Posts Published</h1>
+                        <h1 class="post-title">No Posts Published</h1>
                     </div>
                 {% else %}
                     {% for post in author_posts %}
@@ -75,9 +75,48 @@
                             <h5 class="post-content mt-2">{{ post.content|capfirst|slice:"0:450" }} . . .</h5>
                             <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
                         </div>
-                        {% if user == post.author %}
-                            <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
-                        {% endif %}
+                        
+                        <div class="row justify-content-start" postId="{{ post.id }}">
+                            <div class="col-auto">
+                                {% if user == post.author %}
+                                    <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
+                                {% endif %}
+                            </div>    
+                            <div class="col-auto fs-6" >
+                                {% if user.is_authenticated %}
+                                    {% csrf_token %}
+                                    <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
+                                       
+                                    </i>
+                                    <small class="post-response post-response-star">
+                                        {{ post.get_totalStars }}
+                                    </small>
+                                    
+                                 {% else %}
+                                    <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                    <small class="post-response">
+                                        {{ post.get_totalStars }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                            <div class="col-auto post-response fs-6">
+                                {% if user.is_authenticated %}
+                                    {% csrf_token %}
+                                    <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
+                                       
+                                    </i>
+                                    <small class="post-response post-response-save">
+                                        {{ post.get_totalSaves }}
+                                    </small>
+                                    
+                                 {% else %}
+                                    <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                    <small class="post-response">
+                                        {{ post.get_totalSaves }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
                         <br>
                         <hr>
                     {% endfor %}

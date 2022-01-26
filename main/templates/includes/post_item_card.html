@@ -1,0 +1,49 @@
+<div class="post" >
+    <img src="/media/{{ post.thumbnail }}" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+    <div class="card-body">
+        <h5 class="card-title post-title">{{ post.title|title }} A Lah And There There Computer Science Student, Studyi</h5>
+        <p class="card-text post-content">{{ post.content|capfirst|slice:"0:320" }} . . .</p>
+        <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+    </div>
+</div>
+<div class="card-footer" style="background-color: white">
+{# Post Star and Save Status Section #}
+
+    <div class="row justify-content-start" postId="{{ post.id }}">
+        <div class="col-auto fs-6" >
+            {% if user.is_authenticated %}
+                {% csrf_token %}
+                <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
+                   
+                </i>
+                <small class="post-response post-response-star">
+                    {{ post.get_totalStars }}
+                </small>
+                
+             {% else %}
+                <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                <small class="post-response">
+                    {{ post.get_totalStars }}
+                </small>
+            {% endif %}
+        </div>
+        <div class="col-auto post-response fs-6">
+            {% if user.is_authenticated %}
+                {% csrf_token %}
+                <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
+                   
+                </i>
+                <small class="post-response post-response-save">
+                    {{ post.get_totalSaves }}
+                </small>
+                
+             {% else %}
+                <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                <small class="post-response">
+                    {{ post.get_totalSaves }}
+                </small>
+            {% endif %}
+        </div>
+    </div>
+
+ </div>

@@ -74,11 +74,11 @@
                     </div>
   {# Post Star, Comment and Save Status Section #}
 
-                    <div class="row justify-content-start mt-4">
+                    <div class="row justify-content-start mt-4" postid="{{ post.id }}">
                         <div class="col fs-4 text-center" >
                             {% if user.is_authenticated %}
                                 {% csrf_token %}
-                                <i class="bi bi-star" id="star" value="{{ star_post_status }}"></i>
+                                <i class="star-post bi bi-star" value="{{ star_post_status }}" href="/{{post.author.username}}/{{post.slug}}/star-post"></i>
                                 <p class="post-response" id="post-response-star">
                                     {{ total_stars }}
                                 </p>
@@ -99,7 +99,7 @@
                         <div class="col post-response fs-4 text-center">
                             {% if user.is_authenticated %}
                                 {% csrf_token %}
-                                <i class="bi bi-save" id="save" value="{{ save_post_satus }}"></i>
+                                <i class="save-post bi bi-save" id="save" value="{{ save_post_satus }}" href="/{{post.author.username}}/{{post.slug}}/save-post"></i>
                                 <p class="post-response" id="post-response-save">
                                     {{ total_saves }}
                                 </p>
