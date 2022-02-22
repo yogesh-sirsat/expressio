@@ -54,13 +54,13 @@ class Post(models.Model):
 
     options = (
         ('draft', 'Draft'),
-        ('published', 'Published'),
+        ('published', 'Published'), 
     )
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250, unique_for_date='published')
+    slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)
     excerpt = models.TextField(null=True)
     content = models.TextField()
     published = models.DateTimeField(default=timezone.now)
