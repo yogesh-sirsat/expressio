@@ -2,8 +2,14 @@
 *.log
 *.pot
 *.pyc
-__pycache__
+expressio/__pycache__/
+main/__pycache__/
 db.sqlite3
+
+# Third-party apps #
+static/ckeditor
+static/admin
+static/rest_framework
 
 # Environments 
 expvenv/    
@@ -29,4 +35,4 @@ expvenv/
 *.tmPreferences.cache 
 *.stTheme.cache 
 *.sublime-workspace 
-*.sublime-project 
+*.sublime-project
