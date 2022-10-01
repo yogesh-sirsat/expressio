@@ -9,3 +9,4 @@ Future plans:
 - posts savelist [partial implemented]
 - trending , recommeneded and category specific posts tab[partial implemented]
 
+[Screenshots](https://drive.google.com/drive/folders/1MIyeN6aGMU6oNqCQHPIMNLWBueKO8x29?usp=sharing)
