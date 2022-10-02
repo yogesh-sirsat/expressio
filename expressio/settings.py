@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'main',
     'main.api',
     'corsheaders',
+    'django_extensions',
     'tinymce',
 ]
 
@@ -165,6 +166,12 @@ DJANGORESIZED_DEFAULT_KEEP_META = True
 DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
 DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
+
+# Django extenstion graph models
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": "640px",
