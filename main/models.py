@@ -61,7 +61,6 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)
-    excerpt = models.TextField(null=True)
     content = models.TextField()
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
