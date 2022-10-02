@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from .models import Profile, Post
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from tinymce.widgets import TinyMCE
 
 
 class UserForm(forms.ModelForm):
@@ -16,8 +17,11 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('avatar', 'bio')
 
+class PostContentForm(forms.Form):
+    content = forms.CharField(widget=TinyMCE())
 
 class PostForm(forms.ModelForm):
+    content = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Post
         fields = ('title', 'category', 'thumbnail', 'content')

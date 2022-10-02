@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
 from django_resized import ResizedImageField
+from tinymce import models as tinymce_models
 
 
 class Profile(models.Model):
@@ -61,7 +62,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)
-    content = models.TextField()
+    content = tinymce_models.HTMLField()
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')

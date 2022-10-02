@@ -4,7 +4,9 @@
     {% block title %}
         Edit | {{ user.username }}
     {% endblock %}
-
+  {% block head %}
+    {{ edit_post.media }}
+  {% endblock head %}
 {% block body %}
     <div class="container mt-5">
         <div class="justify-content-center">
@@ -36,10 +38,8 @@
 
                     <div class="mb-3">
                       <label for="content" class="form-label">Content</label>
-                      <textarea class="form-control" id="content" name="content" rows="25" required>{{ post.content }}</textarea>
+                      {{ edit_post.content|safe }}
                     </div>
-
-
                   </div>
 
                   <hr class="my-4">

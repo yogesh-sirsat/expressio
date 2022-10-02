@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from main.forms import UserForm, ProfileForm, PostForm
+from main.forms import UserForm, ProfileForm, PostContentForm, PostForm
 from main.models import Profile, Category, Post
 
 
@@ -121,11 +121,12 @@ def user_profile(request, username):
 @login_required
 def write(request, username):
     categories = Category.objects.all()
-    post_form = PostForm(request.POST, request.FILES)
     if request.method == 'POST':
+        post_form = PostForm(request.POST, request.FILES)
+        post_content_form = PostContentForm(request.POST)
         post_form.title = request.POST['title']
         post_form.category = categories.get(id=request.POST['category'])
-        post_form.content = request.POST['content']
+        post_form.content = post_content_form
         if request.method == 'FILES':
             post_form.thumbnail = request.POST['thumbnail']
         if post_form.is_valid():
@@ -135,13 +136,19 @@ def write(request, username):
 
             messages.success(request, 'Your Post Is Successfully Published')
 
-            return redirect('user_view', request.user.username)
+            context = {
+                "username": request.user.username,
+                "slug": post.slug,
+            }
+            return redirect('post_view', context)
         elif not post_form.is_valid():
             messages.error(request, 'Post Is Invalid')
-
+    else:
+        post_form = PostForm()
     context = {
         'username': username,
         'categories': categories,
+        'post_form': post_form,
     }
 
     return render(request, 'write.html', context)
@@ -155,27 +162,30 @@ def edit(request, username, slug):
                                                      'slug': post.slug}))
 
     categories = Category.objects.all()
-    edit_post = PostForm(request.POST, request.FILES, instance=post)
     if request.method == 'POST':
+        edit_post = PostForm(request.POST, request.FILES, instance=post)
+        post_content_form = PostContentForm(request.POST)
         edit_post.title = request.POST['title']
         edit_post.category = categories.get(id=request.POST['category'])
-        edit_post.content = request.POST['content']
         if request.method == 'FILES':
             edit_post.thumbnail = request.POST['thumbnail']
-        if edit_post.is_valid():
-            update_post = edit_post.save(commit=False)
-            update_post.lastEdited = timezone.now()
-            update_post.save()
+        update_post = edit_post.save(commit=False)
+        update_post.lastEdited = timezone.now()
+        update_post.save()
 
-            messages.success(request, 'Your Post Is Successfully Updated')
+        messages.success(request, 'Your Post Is Successfully Updated')
 
-            return redirect(reverse('post_view', kwargs={'username': request.user.username,
-                                                         'slug': slug}))
+        return redirect(reverse('post_view', kwargs={'username': request.user.username,
+                                                    'slug': slug}))
+    else:
+        edit_post = PostForm(instance=post)
+
     context = {
         'username': username,
         'categories': categories,
         'post': post,
         'slug': slug,
+        'edit_post': edit_post,
     }
     return render(request, 'edit.html', context)
 

@@ -4,6 +4,9 @@
     {% block title %}
         Write | {{ user.username }}
     {% endblock %}
+{% block head %}
+  {{ post_form.media }}
+{% endblock head %}
 
 {% block body %}
     <div class="container mt-5">
@@ -34,10 +37,8 @@
 
                     <div class="mb-3">
                       <label for="content" class="form-label">Content</label>
-                      <textarea class="form-control" id="content" name="content" rows="25" required></textarea>
+                      {{ post_form.content|safe }}
                     </div>
-
-
                   </div>
 
                   <hr class="my-4">

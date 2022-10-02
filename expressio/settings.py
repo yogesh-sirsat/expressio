@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'main',
     'main.api',
     'corsheaders',
+    'tinymce',
 ]
 
 # Application definition
@@ -164,3 +165,16 @@ DJANGORESIZED_DEFAULT_KEEP_META = True
 DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
 DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "640px",
+    "menubar": False,
+    "plugins": "advlist autolink lists link charmap preview anchor searchreplace code "
+    "fullscreen insertdatetime table paste code help wordcount",
+    "toolbar": "undo redo preview | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+    "fullscreen save | insertfile pageembed template link anchor codesample | "
+    "a11ycheck ltr rtl | showcomments addcomment code",
+    "custom_undo_redo_levels": 10,
+}
