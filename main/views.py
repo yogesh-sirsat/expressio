@@ -298,7 +298,7 @@ def follow_author(request, username):
 
     return JsonResponse({'author_followers': author_followers})
 
-
+@login_required
 def subscribe_author(request, username):
     author_username = request.POST.get('author_username')
     author = User.objects.get(username=author_username)
