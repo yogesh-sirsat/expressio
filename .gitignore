@@ -4,12 +4,14 @@
 *.pyc
 expressio/__pycache__/
 main/__pycache__/
-db.sqlite3
+# db.sqlite3
 
 # Third-party apps #
 static/ckeditor
 static/admin
 static/rest_framework
+static/django_extensions
+static/summernote
 
 # Environments 
 expvenv/    
