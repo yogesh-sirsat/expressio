@@ -23,3 +23,8 @@
     font-size: small;
 }
 
+.post_img {
+    max-width: 640px;
+    max-height: 360px;
+    margin: 10px 0;
+}
