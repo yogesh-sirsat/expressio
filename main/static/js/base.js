@@ -47,6 +47,15 @@ $(document).ready(function () {
         return false;
     });
 
+    $(".author-name").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
+    $(".author-avatar").click(function() {
+        window.location = $(this).attr("href");
+        return false;
+    });
+
 //redirect to post view when click on post title | thumbnail
     $(".post").click(function() {
       window.location = $(this).find("a").attr("href");

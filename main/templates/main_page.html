@@ -83,8 +83,24 @@
                   </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <h3>SIDEBARSIDEBAR</h3>
+            <div class="col-md-3">
+                <hr class="mb-4">
+                <div class="who_to_follow">
+                    <h4>Who to follow</h4>
+                    <div class="row justify-content-start">
+                        {% for author in who_to_follow %}
+                        <div class="col-2 ">
+                            <img class="rounded-circle author-avatar" alt="author-avatar" src="/media/{{ author.avatar }}" height="42" width="42"
+                            data-holder-rendered="true" href="/{{ author.user.username }}">
+                        </div>
+                        <div class="col-10">
+                            <h6 type="button" class="author-name" href="/{{ author.user.username }}">{{ author.user.first_name|capfirst }} {{ author.user.last_name|capfirst }}</h6>
+                            <p class="author-bio" href="/{{ author.user.username }}">{{author.bio|slice:"0:75"}}...</p>
+                        </div>
+                        <hr class="mb-2">
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

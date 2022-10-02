@@ -19,6 +19,8 @@ def home(request):
     all_posts = Post.objects.all()
     user = request.user
 
+    who_to_follow = Profile.objects.annotate(user_followers=Count('followers')).order_by('-user_followers')[0:5]
+
     # for the future pending work
     # all_posts_paginator = Paginator(all_posts, 2)
     # following_authors_posts_paginator = Paginator(following_authors_posts,2)
@@ -31,6 +33,7 @@ def home(request):
 
     context = {
         'all_posts': all_posts,
+        'who_to_follow': who_to_follow,
     }
 
     if request.user.is_authenticated:

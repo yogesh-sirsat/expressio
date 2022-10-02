@@ -24,3 +24,7 @@
 .post-content {
     font-family: Times, Times New Roman , serif;
 }
+
+.author-avatar {
+  cursor: pointer;
+}
