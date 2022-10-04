@@ -13,6 +13,7 @@ urlpatterns = [
   path('<str:username>', views.author_view, name='author_view'),
   path('<str:username>/profile', views.user_profile, name='user_profile'),
   path('<str:username>/write', views.write, name='write'),
+  path('<str:username>/<slug:slug>/unpublish', views.unpublish, name='unpublish'),
   path('<str:username>/<slug:slug>/edit', views.edit, name='edit'),
   path('<str:username>/<slug:slug>', views.post_view, name='post_view'),
   path('<str:username>/<slug:slug>/star-post', views.star_post, name='star_post'),

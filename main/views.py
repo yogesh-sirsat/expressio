@@ -16,7 +16,7 @@ from main.models import Profile, Category, Post
 
 
 def home(request):
-    all_posts = Post.objects.all()
+    all_posts = Post.objects.filter(status="published")
     user = request.user
 
     who_to_follow = Profile.objects.annotate(user_followers=Count('followers')).order_by('-user_followers')[0:5]
@@ -37,7 +37,7 @@ def home(request):
     }
 
     if request.user.is_authenticated:
-        following_authors_posts = Post.objects.filter(author__in=user.profile.following.all())
+        following_authors_posts = all_posts.filter(author__in=user.profile.following.all())
         context['following_authors_posts'] = following_authors_posts
 
     return render(request, 'main_page.html', context)
@@ -153,6 +153,12 @@ def write(request, username):
 
     return render(request, 'write.html', context)
 
+@login_required
+def unpublish(request, username, slug):
+    post = Post.objects.get(slug=slug)
+    post.status = 'draft'
+    post.save();
+    return redirect('author_view', username);
 
 @login_required
 def edit(request, username, slug):
@@ -223,7 +229,7 @@ def post_view(request, username, slug):
 
 def author_view(request, username):
     author = get_object_or_404(User, username=username)
-    author_posts = author.posts.all()
+    author_posts = author.posts.filter(status="published")
     user = request.user
 
     follow_author_status = 'notFollowed'

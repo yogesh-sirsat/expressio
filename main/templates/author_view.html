@@ -80,6 +80,7 @@
                             <div class="col-auto">
                                 {% if user == post.author %}
                                     <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
+                                    <a class="btn btn-sm btn-outline-danger" role="button" href="{% url 'unpublish' user.username post.slug %}">Unpublish</a>
                                 {% endif %}
                             </div>    
                             <div class="col-auto fs-6" >
