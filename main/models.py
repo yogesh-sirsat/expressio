@@ -12,7 +12,7 @@ from tinymce import models as tinymce_models
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
@@ -22,17 +22,11 @@ class Profile(models.Model):
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
-        try:
-            instance.profile.save()
-        except ObjectDoesNotExist:
-            Profile.objects.create(user=instance)
         if created:
             Profile.objects.create(user=instance)
 
     def __str__(self):
         return f"{self.user.username}' Profile"
-
-    post_save.connect(create_user_profile, sender=User)
 
     def get_total_following(self):
         return self.following.count()
