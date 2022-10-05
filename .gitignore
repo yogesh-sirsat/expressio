@@ -38,3 +38,6 @@ expvenv/
 *.stTheme.cache 
 *.sublime-workspace 
 *.sublime-project
+
+# dotenv
+.env

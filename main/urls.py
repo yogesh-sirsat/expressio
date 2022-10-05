@@ -22,4 +22,4 @@ urlpatterns = [
   path('<str:username>/author-view/subscribe-author', views.subscribe_author, name='subscribe_author'),
   path('api/', include('main.api.urls', namespace='main_api')),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.base.MEDIA_URL, document_root=settings.base.MEDIA_ROOT)

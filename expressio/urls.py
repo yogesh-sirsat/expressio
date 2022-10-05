@@ -25,9 +25,9 @@ urlpatterns = [
     path('admin/manage/dashboard', admin.site.urls),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     re_path(r'^media/(?P<path>.*)$', serve,
-            {'document_root': settings.MEDIA_ROOT}),
+            {'document_root': settings.base.MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve,
-            {'document_root': settings.STATIC_ROOT}),
+            {'document_root': settings.base.STATIC_ROOT}),
     path('tinymce/', include('tinymce.urls')),
 
 ]
