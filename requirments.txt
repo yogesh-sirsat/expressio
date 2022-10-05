@@ -2,6 +2,7 @@ asgiref==3.5.2
 bleach==5.0.1
 certifi==2019.11.28
 cffi==1.15.1
+charset-normalizer==2.1.1
 clean-text==0.4.0
 cryptography==3.1.1
 distlib==0.3.6
@@ -15,8 +16,10 @@ djangorestframework==3.13.1
 emoji==2.1.0
 filelock==3.8.0
 ftfy==6.1.1
+idna==3.4
 Pillow==9.2.0
 platformdirs==2.5.2
+psycopg2==2.9.3
 pycparser==2.21
 python-dotenv==0.21.0
 pytz==2022.2.1
