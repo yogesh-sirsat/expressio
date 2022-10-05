@@ -14,11 +14,10 @@ class PostAdminForm(forms.ModelForm):
         fields = '__all__'
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category', 'author', 'status', 'published')
+    list_display = ('id', 'title', 'author', 'status', 'published')
     prepopulated_fields = {'slug': ('title',), }
     form = PostAdminForm
 
 
 admin.site.register(models.Profile)
-admin.site.register(models.Category)
 admin.site.register(models.Post, PostAdmin)

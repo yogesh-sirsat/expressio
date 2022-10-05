@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from main.forms import UserForm, ProfileForm, PostContentForm, PostForm
-from main.models import Profile, Category, Post
+from main.models import Profile, Post
 
 
 def home(request):
@@ -120,12 +120,10 @@ def user_profile(request, username):
 
 @login_required
 def write(request, username):
-    categories = Category.objects.all()
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES)
         post_content_form = PostContentForm(request.POST)
         post_form.title = request.POST['title']
-        post_form.category = categories.get(id=request.POST['category'])
         post_form.content = post_content_form
         if request.method == 'FILES':
             post_form.thumbnail = request.POST['thumbnail']
@@ -147,7 +145,6 @@ def write(request, username):
         post_form = PostForm()
     context = {
         'username': username,
-        'categories': categories,
         'post_form': post_form,
     }
 
@@ -167,12 +164,10 @@ def edit(request, username, slug):
         return redirect(reverse('post_view', kwargs={'username': request.user.username,
                                                      'slug': post.slug}))
 
-    categories = Category.objects.all()
     if request.method == 'POST':
         edit_post = PostForm(request.POST, request.FILES, instance=post)
         post_content_form = PostContentForm(request.POST)
         edit_post.title = request.POST['title']
-        edit_post.category = categories.get(id=request.POST['category'])
         if request.method == 'FILES':
             edit_post.thumbnail = request.POST['thumbnail']
         update_post = edit_post.save(commit=False)
@@ -188,7 +183,6 @@ def edit(request, username, slug):
 
     context = {
         'username': username,
-        'categories': categories,
         'post': post,
         'slug': slug,
         'edit_post': edit_post,

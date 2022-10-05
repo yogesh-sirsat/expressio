@@ -35,13 +35,6 @@ class Profile(models.Model):
         return self.followers.count()
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
 class Post(models.Model):
     class PostObjects(models.Manager):
         def get_queryset(self):
@@ -52,7 +45,6 @@ class Post(models.Model):
         ('published', 'Published'), 
     )
 
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)

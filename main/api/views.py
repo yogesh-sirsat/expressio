@@ -1,5 +1,5 @@
 from rest_framework import generics
-from main.models import Category, Post
+from main.models import Post
 from .serializers import PostSerializer
 
 

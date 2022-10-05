@@ -26,16 +26,6 @@
                       <input class="form-control" type="file" id="thumbnail" name="thumbnail" src="/media/{{ post.thumbnail }}" accept="image/*">
                     </div>
 
-                    <div class="col-12">
-                        <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category" aria-label="category select">
-                          <option selected value="{{ post.category.id }}">{{ post.category.name}}</option>
-                            {% for category in categories %}
-                                <option value="{{ category.id }}">{{ category.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
                     <div class="mb-3">
                       <label for="content" class="form-label">Content</label>
                       {{ edit_post.content|safe }}
