@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Count
 from main.forms import UserForm, ProfileForm, PostContentForm, PostForm
 from main.models import Profile, Category, Post
 
