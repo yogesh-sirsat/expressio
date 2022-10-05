@@ -30,6 +30,11 @@
                       {{ post_form.content|safe }}
                     </div>
                   </div>
+                  
+                  <div class="col-12">
+                    <label for="post_tags" class="form-label">Add tags(Coma separated.)</label>
+                    <input class="form-control" type="text" id="post_tags" name="post_tags">
+                  </div>
 
                   <hr class="my-4">
                    {% csrf_token %}

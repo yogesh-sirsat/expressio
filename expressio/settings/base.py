@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_extensions',
     'tinymce',
+    'taggit',
 ]
 
 # Application definition
@@ -189,3 +190,5 @@ TINYMCE_DEFAULT_CONFIG = {
     "a11ycheck ltr rtl | showcomments addcomment code",
     "custom_undo_redo_levels": 10,
 }
+
+TAGGIT_CASE_INSENSITIVE = True

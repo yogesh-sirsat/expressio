@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django_resized import ResizedImageField
 from tinymce import models as tinymce_models
+from taggit.managers import TaggableManager
 
 
 class Profile(models.Model):
@@ -49,6 +50,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)
     content = tinymce_models.HTMLField()
+    tags = TaggableManager(blank=True)
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')

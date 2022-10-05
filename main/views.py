@@ -125,12 +125,14 @@ def write(request, username):
         post_content_form = PostContentForm(request.POST)
         post_form.title = request.POST['title']
         post_form.content = post_content_form
+        post_form.tags = request.POST['tags']
         if request.method == 'FILES':
             post_form.thumbnail = request.POST['thumbnail']
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.author = request.user
             post.save()
+            post_form.save_m2m()
 
             messages.success(request, 'Your Post Is Successfully Published')
 
@@ -168,11 +170,13 @@ def edit(request, username, slug):
         edit_post = PostForm(request.POST, request.FILES, instance=post)
         post_content_form = PostContentForm(request.POST)
         edit_post.title = request.POST['title']
+        post_form.tags = request.POST['tags']
         if request.method == 'FILES':
             edit_post.thumbnail = request.POST['thumbnail']
         update_post = edit_post.save(commit=False)
         update_post.lastEdited = timezone.now()
         update_post.save()
+        edit_post.save_m2m()
 
         messages.success(request, 'Your Post Is Successfully Updated')
 

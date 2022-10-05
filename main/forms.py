@@ -24,7 +24,7 @@ class PostForm(forms.ModelForm):
     content = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Post
-        fields = ('title', 'thumbnail', 'content')
+        fields = ('title', 'thumbnail', 'content', 'tags')
 
     def PostSave(self, user):
         post = self.save(commit=False)
