@@ -17,13 +17,13 @@
                    
                 </i>
                 <small class="post-response post-response-star">
-                    {{ post.get_totalStars }}
+                    {{ post.get_total_stars }}
                 </small>
                 
              {% else %}
                 <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
                 <small class="post-response">
-                    {{ post.get_totalStars }}
+                    {{ post.get_total_stars }}
                 </small>
             {% endif %}
         </div>
@@ -34,13 +34,13 @@
                    
                 </i>
                 <small class="post-response post-response-save">
-                    {{ post.get_totalSaves }}
+                    {{ post.get_total_saves }}
                 </small>
                 
              {% else %}
                 <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
                 <small class="post-response">
-                    {{ post.get_totalSaves }}
+                    {{ post.get_total_saves }}
                 </small>
             {% endif %}
         </div>

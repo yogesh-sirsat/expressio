@@ -34,10 +34,10 @@ class Profile(models.Model):
 
     post_save.connect(create_user_profile, sender=User)
 
-    def get_totalFollowing(self):
+    def get_total_following(self):
         return self.following.count()
 
-    def get_totalFollowers(self):
+    def get_total_followers(self):
         return self.followers.count()
 
 
@@ -78,10 +78,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def get_totalStars(self):
+    def get_total_stars(self):
         return self.stars.count()
 
-    def get_totalSaves(self):
+    def get_total_saves(self):
         return self.saves.count()
 
     def thumbnail_name(self):

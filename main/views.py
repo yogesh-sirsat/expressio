@@ -221,8 +221,8 @@ def post_view(request, username, slug):
         'subscribe_author_status': subscribe_author_status,
         'star_post_status': star_post_status,
         'save_post_satus': save_post_satus,
-        'total_stars': post.get_totalStars(),
-        'total_saves': post.get_totalSaves()
+        'total_stars': post.get_total_stars(),
+        'total_saves': post.get_total_saves()
     }
     return render(request, 'post_view.html', context)
 
@@ -268,7 +268,7 @@ def star_post(request, username, slug):
         else:
             status = 'notStarred'    
 
-    total_stars = post.get_totalStars()
+    total_stars = post.get_total_stars()
 
     return JsonResponse({'total_stars': total_stars, 'star_post_status':status})
 
@@ -293,7 +293,7 @@ def save_post(request, username, slug):
         else:
             status = 'notSaved'    
 
-    total_saves = post.get_totalSaves()
+    total_saves = post.get_total_saves()
 
     return JsonResponse({'total_saves': total_saves, 'save_post_status': status})
 
