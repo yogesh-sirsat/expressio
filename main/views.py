@@ -19,7 +19,7 @@ def home(request):
     all_posts = Post.objects.filter(status="published")
     user = request.user
 
-    who_to_follow = Profile.objects.annotate(user_followers=Count('followers')).order_by('-user_followers')[0:5]
+    who_to_follow = User.objects.annotate(Count('followers')).order_by('followers')[0:5]
 
     # for the future pending work
     # all_posts_paginator = Paginator(all_posts, 2)
@@ -37,7 +37,7 @@ def home(request):
     }
 
     if request.user.is_authenticated:
-        following_authors_posts = all_posts.filter(author__in=user.profile.following.all())
+        following_authors_posts = all_posts.filter(author__in=user.followings.all().values_list('following'))
         context['following_authors_posts'] = following_authors_posts
 
     return render(request, 'main_page.html', context)
@@ -203,9 +203,9 @@ def post_view(request, username, slug):
     star_post_status = 'notStarred'
     save_post_satus = 'notSaved'
 
-    if author.profile.followers.filter(id=user.id).exists():
+    if author.followers.filter(id=user.id).exists():
         follow_author_status = 'followed'
-    if author.profile.subscribers.filter(id=user.id).exists():
+    if author.subscribers.filter(id=user.id).exists():
         subscribe_author_status = 'subscribed'
     if post.stars.filter(id=user.id).exists():
         star_post_status = 'starred'
@@ -233,9 +233,9 @@ def author_view(request, username):
     follow_author_status = 'notFollowed'
     subscribe_author_status = 'notSubscribed'
 
-    if author.profile.followers.filter(id=user.id).exists():
+    if author.followers.filter(id=user.id).exists():
         follow_author_status = 'followed'
-    if author.profile.subscribers.filter(id=user.id).exists():
+    if author.subscribers.filter(id=user.id).exists():
         subscribe_author_status = 'subscribed'
     context = {
         'author_posts': author_posts,
@@ -301,14 +301,13 @@ def follow_author(request, username):
     author_username = request.POST.get('author_username')
     author = User.objects.get(username=author_username)
     user = request.user
-    if author.profile.followers.filter(id=user.id).exists():
-        author.profile.followers.remove(user)
-        user.profile.following.remove(author)
+    follow_relation = author.followers.filter(follower=user);
+    if follow_relation.exists():
+        follow_relation.delete();
     else:
-        author.profile.followers.add(user)
-        user.profile.following.add(author)
+        Follow.objects.create(follower=user, following=author);
 
-    author_followers = author.profile.followers.count()
+    author_followers = author.followers.count()
 
     return JsonResponse({'author_followers': author_followers})
 
@@ -316,9 +315,9 @@ def follow_author(request, username):
 def subscribe_author(request, username):
     author_username = request.POST.get('author_username')
     author = User.objects.get(username=author_username)
-    if author.profile.subscribers.filter(id=request.user.id).exists():
-        author.profile.subscribers.remove(request.user)
+    if author.subscribers.filter(id=request.user.id).exists():
+        author.subscribers.remove(request.user)
     else:
-        author.profile.subscribers.add(request.user)
+        author.subscribers.add(request.user)
 
     return JsonResponse({'username': username})

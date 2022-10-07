@@ -17,8 +17,6 @@ class Profile(models.Model):
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
-    following = models.ManyToManyField(User, related_name='user_following', blank=True)
-    followers = models.ManyToManyField(User, related_name='user_followers', blank=True)
     subscribers = models.ManyToManyField(User, related_name='user_subscribers', blank=True)
 
     @receiver(post_save, sender=User)
@@ -29,11 +27,12 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}' Profile"
 
-    def get_total_following(self):
-        return self.following.count()
 
-    def get_total_followers(self):
-        return self.followers.count()
+
+class Follow(models.Model):
+    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, related_name='followings', on_delete=models.CASCADE)
+    following_since = models.DateTimeField(default=timezone.now)
 
 
 class Post(models.Model):

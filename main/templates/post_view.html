@@ -45,7 +45,7 @@
  {# Author Follow And Subscribe Status Section #}
                     <div class="col-md-12">
 
-                        <h6 type="button" class="mt-2" id="author-followers" data-bs-toggle="modal" data-bs-target="#authorFollowersModal">{{ author.profile.followers.count }} Followers</h6>
+                        <h6 type="button" class="mt-2" id="author-followers" data-bs-toggle="modal" data-bs-target="#authorFollowersModal">{{ author.followers.count }} Followers</h6>
                         {% if user.is_authenticated %}
                             {% if author == request.user %}
                                 <button class="btn btn-sm btn-success mt-2" disabled>
