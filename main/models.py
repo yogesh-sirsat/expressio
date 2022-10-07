@@ -46,7 +46,7 @@ class Post(models.Model):
         ('published', 'Published'), 
     )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='posts', null=True)
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published', blank=True)
     content = tinymce_models.HTMLField()
