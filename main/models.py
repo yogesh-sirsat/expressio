@@ -17,7 +17,6 @@ class Profile(models.Model):
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
                                default="user_profile/avatar/default_user_avatar.jpg")
     bio = models.TextField(max_length=500, default="")
-    subscribers = models.ManyToManyField(User, related_name='user_subscribers', blank=True)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -33,6 +32,12 @@ class Follow(models.Model):
     following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
     follower = models.ForeignKey(User, related_name='followings', on_delete=models.CASCADE)
     following_since = models.DateTimeField(default=timezone.now)
+
+
+class Subscription(models.Model):
+    author = models.ForeignKey(User, related_name="subscribers", on_delete=models.CASCADE)
+    subscriber = models.ForeignKey(User, related_name="subscriptions", on_delete=models.CASCADE)
+    starts_at = models.DateField(default=timezone.now)
 
 
 class Post(models.Model):

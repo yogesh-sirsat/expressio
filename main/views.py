@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from main.forms import UserForm, ProfileForm, PostContentForm, PostForm
-from main.models import Profile, Post
+from main.models import *
 
 
 def home(request):
@@ -301,11 +301,11 @@ def follow_author(request, username):
     author_username = request.POST.get('author_username')
     author = User.objects.get(username=author_username)
     user = request.user
-    follow_relation = author.followers.filter(follower=user);
+    follow_relation = author.followers.filter(follower=user)
     if follow_relation.exists():
         follow_relation.delete();
     else:
-        Follow.objects.create(follower=user, following=author);
+        Follow.objects.create(follower=user, following=author)
 
     author_followers = author.followers.count()
 
@@ -315,9 +315,10 @@ def follow_author(request, username):
 def subscribe_author(request, username):
     author_username = request.POST.get('author_username')
     author = User.objects.get(username=author_username)
-    if author.subscribers.filter(id=request.user.id).exists():
-        author.subscribers.remove(request.user)
+    subscription = author.subscribers.filter(id=request.user)
+    if subscription.exists():
+        subscription.delete()
     else:
-        author.subscribers.add(request.user)
+        Subscription.objects.create(author=author, subscriber=request.user)
 
     return JsonResponse({'username': username})
