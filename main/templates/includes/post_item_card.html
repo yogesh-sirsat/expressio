@@ -1,8 +1,8 @@
-<div class="post" >
-    <img src="/media/{{ post.thumbnail }}" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+<div class="post_item">
+    <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
     <div class="card-body">
-        <h5 class="card-title post-title">{{ post.title|title }} A Lah And There There Computer Science Student, Studyi</h5>
-        <p class="card-text post-content">{{ post.content|capfirst|slice:"0:320" }} . . .</p>
+        <h5 class="card-title post-title">{{ post.title|title }}</h5>
+        <p class="card-text post-content">{{ post.content|safe|slice:"0:320" }} . . .</p>
         <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
     </div>
 </div>
