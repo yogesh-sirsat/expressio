@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from . import models
-from main.models import Post
+from main.models import *
 from tinymce.widgets import TinyMCE
 
 
@@ -19,5 +19,12 @@ class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
 
 
-admin.site.register(models.Profile)
-admin.site.register(models.Post, PostAdmin)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('content', 'author', 'posted_at',)
+    readonly_fields = ('posted_at',)
+
+
+admin.site.register(Follow)
+admin.site.register(Subscription)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Post, PostAdmin)
