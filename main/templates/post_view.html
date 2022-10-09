@@ -11,19 +11,20 @@
 
 {% block body %}
 
-    <div class="container" id="postContainer" postid="{{ post.id }}" author="{{ author.username }}">
+    <div class="container" id="postContainer" postid="{{ post.id }}" data-full-path="{{ request.get_full_path }}" author="{{ author.username }}">
         {% include "includes/user_followers.html" %}
 
         <div class="row">
 
             <div class="author-posts col-md-8 mt-5">
                 <div class="post">
-                    <h1 class="post-title">{{ post.title|capfirst }} a lah and there there computer science student, studyi</h1>
+                    <h1 class="post-title">{{ post.title|capfirst }}</h1>
                     <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
-                    <h5 class="post-content">{{ post.content|capfirst }}</h5>
+                    <p class="post-content">{{ post.content|safe }}</p>
                     <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
                 </div>
                 <hr>
+                {% include 'includes/comments_section.html' %}
             </div>
             <div class="author col-md-2 mt-5" id="author" value="{{ author.username }}">
                 <div class="position-sticky" style="top: 2rem;">
@@ -37,8 +38,7 @@
                                 {{ author.first_name|capfirst }} {{ author.last_name|capfirst }}
                             </h5>
 
-                            <h6 class="author-bio" type="text">{{ author.profile.bio|title }} blah blah and there
-                                there computer science student, studying in india</h6>
+                            <h6 class="author-bio" type="text">{{ author.profile.bio|title }}</h6>
 
                         </div>
                     </div>
@@ -74,33 +74,38 @@
                         <div class="col fs-4 text-center" >
                             {% if user.is_authenticated %}
                                 {% csrf_token %}
-                                <i class="star-post bi bi-star" value="{{ star_post_status }}" href="/{{post.author.username}}/{{post.slug}}/star-post"></i>
+                                <i class="star-post bi bi-star" role="button" value="{{ star_post_status }}" href="/{{post.author.username}}/{{post.slug}}/star-post"></i>
                                 <p class="post-response" id="post-response-star">
                                     {{ total_stars }}
                                 </p>
                              {% else %}
-                                <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                <i class="bi bi-star" role="button" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
                                 <p class="post-response">
                                     {{ total_stars }}
                                 </p>
                             {% endif %}
                         </div>
+                        {% if user.is_authenticated %}
                         <div class="col post-response fs-4 text-center">
-                            <i class="bi bi-chat" id="comment" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
-                            <p class="post-response">
-                                9
+                        {% else %}
+                        <div class="col post-response fs-4" role="button" data-bs-toggle="modal" data-bs-target="#signInModal">
+                        {% endif %}
+                            <a role="button" href="#comments-section">
+                                <i class="bi bi-chat"></i>
+                            </a>
+                            <p class="post-response text-center">
+                                {{ post_comments.count }}
                             </p>
-
                         </div>
                         <div class="col post-response fs-4 text-center">
                             {% if user.is_authenticated %}
                                 {% csrf_token %}
-                                <i class="save-post bi bi-save" id="save" value="{{ save_post_satus }}" href="/{{post.author.username}}/{{post.slug}}/save-post"></i>
+                                <i class="save-post bi bi-save" role="button" id="save" value="{{ save_post_satus }}" href="/{{post.author.username}}/{{post.slug}}/save-post"></i>
                                 <p class="post-response" id="post-response-save">
                                     {{ total_saves }}
                                 </p>
                              {% else %}
-                                <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                                <i class="bi bi-save" role="button" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
                                 <p class="post-response">
                                     {{ total_saves }}
                                 </p>

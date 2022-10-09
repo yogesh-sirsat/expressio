@@ -84,3 +84,17 @@ class Post(models.Model):
         if not self.slug:
             self.slug = "{}{}{}".format(slugify(self.title), "-", self.id)
             Post.objects.filter(id=self.id).update(slug=self.slug)
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', related_name='replies', on_delete=models.SET_NULL, null=True, blank=True)
+    content = models.TextField(blank=False)
+    posted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+        ordering = ("-posted_at",)
+

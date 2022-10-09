@@ -1,0 +1,19 @@
+<div class="card w-100 h-auto mt-3">
+    <div class="card-body row">
+        <div class="user_avatar col-sm-auto">
+            <img src="/media/{{reply.author.profile.avatar}}" height="36" width="36"
+        style="border: 1px solid black; border-radius: 18px" />
+        </div>
+        <div class="col">
+            <div class="comment_topbar row">
+                <h6 class="card-title col-sm-auto">{{reply.author}}
+                {% if reply.author == post.author %}
+                    <span class="badge rounded-pill bg-info">Author<i class="bi bi-award"></i></span>
+                {% endif %}
+                </h6>&#8226;
+                <p class="comment_date col">{{reply.posted_at.date}}</p>
+            </div>
+            <p class="card-text">{{reply.content|safe}}</p>
+        </div>
+    </div>
+</div>

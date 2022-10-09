@@ -4,7 +4,7 @@ $(document).ready(function (){
     let subscribeAuthor = $('#subscribe-author');
     let starPost = $('.star-post');
     let savePost = $('.save-post');
-    let windowLocationHref = window.location.href;
+    const current_post_url = $("#postContainer").attr("data-full-path");
     let authorUsername = $('#author').attr('value');
 
     if(followAuthor.attr('value') === 'followed'){
@@ -258,5 +258,81 @@ $(document).ready(function (){
 
     });
 
+    $("#comment_box").focus(function () {
+        $(this).attr("rows", "4");
+    });
+
+    $("#comments-section .reply_box").focus(function () { 
+        $(this).attr("rows", "4");        
+    });
+
+    $("#comments-section .post_comment").on('click', function (event) {
+        event.preventDefault();
+        const comment_content = $("#comment_box").val();
+        if (comment_content === "") {
+            alert("Comment is blank!");
+            return;
+        }
+        const post_id = $(this).attr("data-post-id");
+        const comment_data = {
+            content: comment_content,
+            post_id
+        };
+        $.ajax({
+            type: "POST",
+            url: current_post_url+"/comment-post",
+            data: comment_data,
+            dataType: "json",
+            success: function (response) {
+                $("#comments-section .posted_comments").prepend(response["comment_item"]);
+                $("#comment_box").val("");
+            },
+            error: function(error) {
+                alert("Posting comment failed! : ", error);
+            },
+        });
+    });
+
+    $("#comments-section .comment_replies").on("click", function (event) {
+        event.preventDefault();
+        const parent_comment = ($(this).parent().attr("data-comment-id"));
+        $("#replies-of-"+parent_comment).toggle();
+    });
+
+    $("#comments-section .reply_btn").on("click", function (event) {
+        event.preventDefault();
+        const parent_comment = ($(this).parent().parent().attr("data-comment-id"));
+        $("#reply-form-of-"+parent_comment).toggle();
+    });
+
+    $("#comments-section .post_reply").on("click", function (event) {
+        event.preventDefault();
+        const parent_comment = $(this).attr("data-comment-id");
+        const reply_input_elem = $("#reply-form-of-"+parent_comment+" .reply_box");
+        const reply_content = reply_input_elem.val();
+        if (reply_content === "") {
+            alert("Reply is blank!");
+            return;
+        }
+        const reply_data = {
+            content: reply_content,
+            parent_id: parent_comment,
+        };
+        console.log(reply_content, parent_comment);
+        $.ajax({
+            type: "POST",
+            url: current_post_url+"/reply-comment",
+            data: reply_data,
+            dataType: "json",
+            success: function (response) {
+                $("#replies-of-"+parent_comment).show().prepend(response["reply_item"]);
+                reply_input_elem.val("");
+            },
+            error: function(error) {
+                alert("Posting reply failed! : ", error);
+            },
+        });
+
+    });
 
 });

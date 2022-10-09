@@ -1,0 +1,59 @@
+<div class="comment_item mt-4">
+    <div class="comment_item_content">
+        <div class="card w-100 h-auto">
+            <div class="card-body row">
+                <div class="user_avatar col-sm-auto">
+                    <img src="/media/{{comment.author.profile.avatar}}" height="36" width="36"
+                style="border: 1px solid black; border-radius: 18px" />
+                </div>
+                <div class="col">
+                    <div class="comment_topbar row">
+                        <h6 class="card-title col-sm-auto">{{comment.author}} 
+                        {% if comment.author == post.author %}
+                            <span class="badge rounded-pill bg-info">Author<i class="bi bi-award"></i></span>
+                        {% endif %}
+                        </h6>
+                        &#8226;
+                        <p class="comment_date col">{{comment.posted_at.date}}</p>
+                    </div>
+                    <p class="card-text">{{comment.content|safe}}</p>
+                    <div class="comment_bottombar row" data-comment-id="{{comment.id}}">
+                        <a class="comment_replies col-sm-auto" role="button">
+                            <i class="bi bi-chat">
+                            </i>
+                            {{comment.replies.count}} Replies
+                        </a>
+                        <div class="col">
+                            {% if user.is_authenticated %}
+                                <a class="btn btn-outline-dark btn-sm reply_btn" role="button">Reply</a>
+                            {% else %}
+                                <a class="btn btn-outline-dark btn-sm " role="button" data-bs-toggle="modal" data-bs-target="#signInModal">Reply</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="replies_section container-fluid">
+            <div class="reply_form_wrapper mt-3" id="reply-form-of-{{comment.id}}">
+                <form class="reply_form" method="post">
+                    <div>
+                        <textarea type="text" class="form-control reply_box" name="reply_box" placeholder="Enter your reply here."
+                            required></textarea>
+                    </div>
+                    {% csrf_token %} 
+                    <button class="btn btn-sm btn-outline-dark mt-2 post_reply" type="submit" data-comment-id="{{ comment.id }}">Post</button>
+                </form>
+                <hr/>
+            </div>
+    
+            <div class="comment_item_replies" id="replies-of-{{comment.id}}">
+                {% if comment.replies %}
+                    {% for reply in comment.replies.all %}
+                        {% include "includes/reply_item.html" %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="comments_section" id="comments-section">
+    <h3>Comments section</h3>
+    <div class="comment_form_wrapper container-fluid">
+        <form class="comment_form" method="post">
+            <div>
+                <label for="comment_box" class="form-label"></label>
+                <textarea type="text" class="form-control" id="comment_box" name="comment_box" placeholder="Enter your comment here."
+                    required></textarea>
+            </div>
+            {% csrf_token %} 
+            {% if user.is_authenticated %}
+            <button class="btn btn-outline-dark mt-2 post_comment" type="submit" data-post-id="{{ post.id }}">Post</button>
+            {% else %}
+            <button class="btn btn-outline-dark mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
+                Post
+            </button>
+            {% endif %}
+        </form>
+        <hr class="mb-4" />
+    </div>
+    <div class="posted_comments container mb-4">
+        {% if post_comments %}
+            {% for comment in post_comments %}
+                {% if comment.parent is None %}
+                    {% include "includes/comment_item.html" %}
+                {% endif %}
+            {% endfor %} 
+        {% else %}
+            <h2>Be the <b>First</b> One To Comment On This Post.</h3>
+        {% endif %}
+    </div>
+    <hr/>
+</div>

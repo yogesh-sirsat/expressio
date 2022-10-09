@@ -140,7 +140,7 @@ def write(request, username):
                 "username": request.user.username,
                 "slug": post.slug,
             }
-            return redirect('post_view', context)
+            return redirect(reverse('post_view', kwargs=context))
         elif not post_form.is_valid():
             messages.error(request, 'Post Is Invalid')
     else:
@@ -211,6 +211,8 @@ def post_view(request, username, slug):
         star_post_status = 'starred'
     if post.saves.filter(id=user.id).exists():
         save_post_satus = 'saved'
+    
+    post_comments = post.comments.all()
 
     context = {
         'post': post,
@@ -220,7 +222,8 @@ def post_view(request, username, slug):
         'star_post_status': star_post_status,
         'save_post_satus': save_post_satus,
         'total_stars': post.get_total_stars(),
-        'total_saves': post.get_total_saves()
+        'total_saves': post.get_total_saves(),
+        'post_comments': post_comments,
     }
     return render(request, 'post_view.html', context)
 
@@ -322,3 +325,26 @@ def subscribe_author(request, username):
         Subscription.objects.create(author=author, subscriber=request.user)
 
     return JsonResponse({'username': username})
+
+
+@login_required
+def comment_post(request, username, slug):
+    post = Post.objects.get(id=request.POST.get('post_id'))
+    comment_content = request.POST.get('content')
+
+    comment = Comment.objects.create(author=request.user, post=post, content=request.POST.get('content'))
+    comment_item = render_to_string('includes/comment_item.html', {'comment': comment}, request=request)
+
+    return JsonResponse({'comment_item': comment_item})
+
+
+@login_required
+def reply_comment(request, username, slug):
+    parent_comment = Comment.objects.get(id=request.POST.get('parent_id'))
+    reply_content = request.POST.get('content')
+    post = parent_comment.post
+
+    reply_comment = Comment.objects.create(author=request.user, post=post, content=reply_content, parent=parent_comment)
+    reply_item = render_to_string('includes/reply_item.html', {'reply': reply_comment}, request=request)
+
+    return JsonResponse({'reply_item': reply_item})

@@ -28,3 +28,12 @@
 .author-avatar {
   cursor: pointer;
 }
+
+a {
+  color: #212529;
+}
+
+a:hover,
+a:focus {
+  color: #000000;
+}

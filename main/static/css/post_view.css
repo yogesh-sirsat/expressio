@@ -1,3 +1,44 @@
 .post-response{
     font-size: small;
 }
+
+#comment_box {
+    border-radius: 8px;
+}
+
+.comment_item .user_avatar {
+    padding-right: 0;
+}
+
+.comment_replies {
+    text-decoration: none;
+}
+
+.reply_btn {
+    float: right;
+}
+
+.comment_topbar .card-title,
+.comment_topbar .comment_date,
+.comment_topbar .bi {
+    margin-bottom: 0;
+    align-items: center;
+}
+
+.comment_bottombar {
+    align-items: end;
+}
+
+.comment_item .card {
+    border-radius: 8px;
+}
+
+#comments-section .comment_item_replies,
+#comments-section .reply_form_wrapper {
+    display: none;
+}
+
+#comments-section .replies_section {
+    border-left: 1px solid rgba(107, 107, 107, 0.89);
+    padding-right: 0;
+}

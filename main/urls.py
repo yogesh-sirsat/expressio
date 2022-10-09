@@ -20,6 +20,8 @@ urlpatterns = [
   path('<str:username>/<slug:slug>/save-post', views.save_post, name='save_post'),
   path('<str:username>/author-view/follow-author', views.follow_author, name='follow_author'),
   path('<str:username>/author-view/subscribe-author', views.subscribe_author, name='subscribe_author'),
+  path('<str:username>/<slug:slug>/comment-post', views.comment_post, name='comment_post'),
+  path('<str:username>/<slug:slug>/reply-comment', views.reply_comment, name='reply_comment'),
   path('api/', include('main.api.urls', namespace='main_api')),
 
 ] + static(settings.base.MEDIA_URL, document_root=settings.base.MEDIA_ROOT)
