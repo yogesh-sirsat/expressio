@@ -2,6 +2,16 @@
     font-size: small;
 }
 
+.author_info {
+    padding-left: 24px;
+}
+
+.post {
+    border-radius: 6px;
+    background-color: whitesmoke;
+    padding: 14px;
+}
+
 #comment_box {
     border-radius: 8px;
 }

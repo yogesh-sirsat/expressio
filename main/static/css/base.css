@@ -37,3 +37,14 @@ a:hover,
 a:focus {
   color: #000000;
 }
+
+.post_tags {
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.post_tags .tag {
+  padding: 0 5px;
+  border-radius: 6px;
+  background-color: lightgray;
+}

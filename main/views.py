@@ -125,7 +125,6 @@ def write(request, username):
         post_content_form = PostContentForm(request.POST)
         post_form.title = request.POST['title']
         post_form.content = post_content_form
-        post_form.tags = request.POST['tags']
         if request.method == 'FILES':
             post_form.thumbnail = request.POST['thumbnail']
         if post_form.is_valid():
@@ -141,7 +140,8 @@ def write(request, username):
                 "slug": post.slug,
             }
             return redirect(reverse('post_view', kwargs=context))
-        elif not post_form.is_valid():
+        
+        else:
             messages.error(request, 'Post Is Invalid')
     else:
         post_form = PostForm()
@@ -168,20 +168,21 @@ def edit(request, username, slug):
 
     if request.method == 'POST':
         edit_post = PostForm(request.POST, request.FILES, instance=post)
-        post_content_form = PostContentForm(request.POST)
-        edit_post.title = request.POST['title']
-        post_form.tags = request.POST['tags']
-        if request.method == 'FILES':
-            edit_post.thumbnail = request.POST['thumbnail']
-        update_post = edit_post.save(commit=False)
-        update_post.lastEdited = timezone.now()
-        update_post.save()
-        edit_post.save_m2m()
+        if edit_post.is_valid():
 
-        messages.success(request, 'Your Post Is Successfully Updated')
+            edit_post.title = request.POST['title']
+            if request.method == 'FILES':
+                edit_post.thumbnail = request.POST['thumbnail']
+            update_post = edit_post.save(commit=False)
+            update_post.lastEdited = timezone.now()
+            update_post.save()
+            edit_post.save_m2m()
 
-        return redirect(reverse('post_view', kwargs={'username': request.user.username,
+            messages.success(request, 'Your Post Is Successfully Updated')
+
+            return redirect(reverse('post_view', kwargs={'username': request.user.username,
                                                     'slug': slug}))
+        messages.error(request, 'Post Is Invalid')
     else:
         edit_post = PostForm(instance=post)
 

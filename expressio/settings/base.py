@@ -52,8 +52,10 @@ INSTALLED_APPS = [
     'django_extensions',
     'tinymce',
     'taggit',
+    'crispy_forms',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Application definition
 
 

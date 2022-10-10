@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
     {% block title %}
         Edit | {{ user.username }}
@@ -33,8 +34,7 @@
                   </div>
 
                   <div class="col-12">
-                    <label for="post_tags" class="form-label">Add tags(Coma separated.)</label>
-                    <input class="form-control" type="text" id="post_tags" name="post_tags">
+                    {{ edit_post.tags|as_crispy_field }}
                   </div>
 
                   <hr class="my-4">

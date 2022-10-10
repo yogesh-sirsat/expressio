@@ -79,6 +79,9 @@ class Post(models.Model):
     def thumbnail_name(self):
         return os.path.basename(self.thumbnail.name)
 
+    def display_all_tags(self):
+        return ", ".join(tag for tag in self.tags.names())
+
     def save(self, *args, **kwargs):
         super(Post, self).save(*args, **kwargs)
         if not self.slug:

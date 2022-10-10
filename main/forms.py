@@ -4,6 +4,7 @@ from .models import Profile, Post
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from tinymce.widgets import TinyMCE
+from taggit.forms import TagWidget
 
 
 class UserForm(forms.ModelForm):
@@ -25,6 +26,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('title', 'thumbnail', 'content', 'tags')
+        widgets = {
+            'tags': TagWidget(),
+        }
 
     def PostSave(self, user):
         post = self.save(commit=False)

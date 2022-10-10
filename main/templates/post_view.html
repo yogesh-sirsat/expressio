@@ -19,9 +19,28 @@
             <div class="author-posts col-md-8 mt-5">
                 <div class="post">
                     <h1 class="post-title">{{ post.title|capfirst }}</h1>
+                    <div class="author_info row">
+                        <div class="author_avatar col-sm-auto">
+                           ~ <img src="/media/{{post.author.profile.avatar}}" height="36" width="36"
+                        style="border: 1px solid black; border-radius: 18px" />
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <h6 class="col-sm-auto">{{post.author}}</h6>
+                                &#8226;
+                                <p class=" col">{{post.published.date}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if post.tags %}
+                        <div class="hstack post_tags gap-3 mt-2">
+                            {% for tag in post.tags.names %}
+                            <div class="tag border">{{ tag }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
                     <p class="post-content">{{ post.content|safe }}</p>
-                    <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
                 </div>
                 <hr>
                 {% include 'includes/comments_section.html' %}
