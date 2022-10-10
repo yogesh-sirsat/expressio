@@ -10,12 +10,18 @@ from django.utils.text import slugify
 from django_resized import ResizedImageField
 from tinymce import models as tinymce_models
 from taggit.managers import TaggableManager
+from django.core.files import File
+from urllib.request import urlopen
+from tempfile import NamedTemporaryFile
 
+
+def get_random_default_avatar_url_for(username):
+    return f"https://robohash.org/{username}/set_set1/bgset_bg1/size=360x360.png?ignoreext=false"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar',
-                               default="user_profile/avatar/default_user_avatar.jpg")
+    avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar', null=True)
+    avatar_url = models.URLField(null=True, blank=True)
     bio = models.TextField(max_length=500, default="")
 
     @receiver(post_save, sender=User)
@@ -26,6 +32,19 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}' Profile"
 
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+        if not self.avatar:
+            # robohash avatar as default
+            if not self.avatar_url: 
+                avatar_url = get_random_default_avatar_url_for(self.user.username)
+            else:
+                avatar_url = self.avatar_url
+            self.avatar_url = avatar_url
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(urlopen(avatar_url).read())
+            img_temp.flush()
+            self.avatar.save(f"avatar_{self.user.username}", File(img_temp))
 
 
 class Follow(models.Model):
