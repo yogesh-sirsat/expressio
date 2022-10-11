@@ -16,27 +16,34 @@
                 <form method="POST" enctype="multipart/form-data">
                   <div class="row g-3">
                     <div class="col-12">
-                      <label for="title" class="form-label">Title</label>
-                      <input type="text" class="form-control form-control-lg" id="title" name="title" value="{{ post.title }}" required>
+                      {{ edit_post.title|as_crispy_field }}
                     </div>
 
                     <div class="col-12">
-                      <label for="thumbnail" class="form-label">Thumbnail</label>
-                        <br>
-                      <p>Currently: <a href="/media/{{ post.thumbnail }}">{{ post.thumbnail_name }}</a> </p>
+                      <label for="thumbnail">Thumbnail</label>
+                      <p>Current: <a href="/media/{{ post.thumbnail }}">{{ post.thumbnail_name }}</a> </p>
                       <input class="form-control" type="file" id="thumbnail" name="thumbnail" src="/media/{{ post.thumbnail }}" accept="image/*">
+                    </div>
+                    
+                    <div class="col-12">
+                      {{ edit_post.description|as_crispy_field }}
                     </div>
 
                     <div class="mb-3">
-                      <label for="content" class="form-label">Content</label>
+                      <label for="content">Content</label>
                       {{ edit_post.content|safe }}
                     </div>
-                  </div>
+                    
+                    <div class="col-12">
+                      {{ edit_post.source|as_crispy_field }}
+                    </div>
 
-                  <div class="col-12">
-                    {{ edit_post.tags|as_crispy_field }}
-                  </div>
+                    <div class="col-12">
+                      {{ edit_post.tags|as_crispy_field }}
+                    </div>
 
+                  </div>
+                    
                   <hr class="my-4">
                    {% csrf_token %}
                   <button class="btn btn-secondary btn-lg" type="submit">Update</button>

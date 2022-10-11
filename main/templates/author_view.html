@@ -72,18 +72,20 @@
                         <div class="post">
                             <h2 class="post-title">{{ post.title|title }}</h2>
                             <img src="/media/{{ post.thumbnail }}" class="img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
-                            <h5 class="post-content mt-2">{{ post.content|safe|slice:"0:450" }} . . .</h5>
-                            <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+                            {% if post.description %}
+                            <p class="post-description mt-2">{{ post.description|safe }}</p>
+                            {% endif %}
+                            <a class="post_link" href="/{{ post.author.username }}/{{ post.slug }}"></a>
                         </div>
                         
-                        <div class="row justify-content-start" postId="{{ post.id }}">
+                        <div class="row mt-2 justify-content-start" postId="{{ post.id }}">
                             <div class="col-auto">
                                 {% if user == post.author %}
                                     <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
                                     <a class="btn btn-sm btn-outline-danger" role="button" href="{% url 'unpublish' user.username post.slug %}">Unpublish</a>
                                 {% endif %}
                             </div>    
-                            <div class="col-auto fs-6" >
+                            <div class="col-auto fs-4" >
                                 {% if user.is_authenticated %}
                                     {% csrf_token %}
                                     <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
@@ -100,7 +102,7 @@
                                     </small>
                                 {% endif %}
                             </div>
-                            <div class="col-auto post-response fs-6">
+                            <div class="col-auto post-response fs-4">
                                 {% if user.is_authenticated %}
                                     {% csrf_token %}
                                     <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
@@ -118,7 +120,6 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <br>
                         <hr>
                     {% endfor %}
                 {% endif %}

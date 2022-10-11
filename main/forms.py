@@ -25,7 +25,7 @@ class PostForm(forms.ModelForm):
     content = forms.CharField(widget=TinyMCE())
     class Meta:
         model = Post
-        fields = ('title', 'thumbnail', 'content', 'tags')
+        fields = ('title', 'thumbnail', 'description', 'content', 'source', 'tags')
         widgets = {
             'tags': TagWidget(),
         }

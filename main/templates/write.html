@@ -17,25 +17,31 @@
                 <form method="POST" enctype="multipart/form-data">
                   <div class="row g-3">
                     <div class="col-12">
-                      <label for="title" class="form-label">Title</label>
-                      <input type="text" class="form-control form-control-lg" id="title" name="title" required>
+                      {{ post_form.title|as_crispy_field }}
                     </div>
 
                     <div class="col-12">
-                      <label for="thumbnail" class="form-label">Thumbnail</label>
+                      <label for="thumbnail">Thumbnail</label>
                       <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*">
                     </div>
 
-                    <div class="mb-3">
-                      <label for="content" class="form-label">Content</label>
+                      <div class="col-12">
+                        {{ post_form.description|as_crispy_field }}
+                      </div>
+
+                    <div class="mb-3 col-12">
+                      <label for="content">Content</label>
                       {{ post_form.content|safe }}
                     </div>
-                  </div>
-                  
-                  <div class="col-12">
-                    {{ post_form.tags|as_crispy_field }}
-                  </div>
+                    
+                    <div class="col-12">
+                      {{ post_form.source|as_crispy_field }}
+                    </div>
 
+                    <div class="col-12">
+                      {{ post_form.tags|as_crispy_field }}
+                    </div>
+                  </div>
                   <hr class="my-4">
                    {% csrf_token %}
                   <button class="btn btn-secondary btn-lg" type="submit">Publish</button>

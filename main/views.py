@@ -122,9 +122,6 @@ def user_profile(request, username):
 def write(request, username):
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES)
-        post_content_form = PostContentForm(request.POST)
-        post_form.title = request.POST['title']
-        post_form.content = post_content_form
         if request.method == 'FILES':
             post_form.thumbnail = request.POST['thumbnail']
         if post_form.is_valid():
@@ -168,11 +165,9 @@ def edit(request, username, slug):
 
     if request.method == 'POST':
         edit_post = PostForm(request.POST, request.FILES, instance=post)
+        if request.method == 'FILES':
+            edit_post.thumbnail = request.POST['thumbnail']
         if edit_post.is_valid():
-
-            edit_post.title = request.POST['title']
-            if request.method == 'FILES':
-                edit_post.thumbnail = request.POST['thumbnail']
             update_post = edit_post.save(commit=False)
             update_post.lastEdited = timezone.now()
             update_post.save()
@@ -333,7 +328,7 @@ def comment_post(request, username, slug):
     post = Post.objects.get(id=request.POST.get('post_id'))
     comment_content = request.POST.get('content')
 
-    comment = Comment.objects.create(author=request.user, post=post, content=request.POST.get('content'))
+    comment = Comment.objects.create(author=request.user, post=post, content=comment_content)
     comment_item = render_to_string('includes/comment_item.html', {'comment': comment}, request=request)
 
     return JsonResponse({'comment_item': comment_item})

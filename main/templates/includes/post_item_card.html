@@ -2,7 +2,11 @@
     <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
     <div class="card-body">
         <h5 class="card-title post-title">{{ post.title|title }}</h5>
-        <p class="card-text post-content">{{ post.content|safe|slice:"0:320" }} . . .</p>
+        {% if post.description %}
+        <p class="card-text post-description">
+            {{ post.description|safe|slice:"0:320" }}
+        </p>
+        {% endif %}
         <div class="row">
             {% if post.tags %}
                 <div class="hstack post_tags gap-1 mt-1">
@@ -12,7 +16,7 @@
                 </div>
             {% endif %}
         </div>
-        <a href="/{{ post.author.username }}/{{ post.slug }}"></a>
+        <a class="post_link" href="/{{ post.author.username }}/{{ post.slug }}"></a>
     </div>
 </div>
 <div class="card-footer" style="background-color: white">
