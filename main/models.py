@@ -77,9 +77,11 @@ class Post(models.Model):
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')
-    thumbnail = ResizedImageField(size=(1280, 720), upload_to='posts/thumbnails', default="", blank=True, null=True)
+    thumbnail = ResizedImageField(size=(1280, 720), upload_to='posts/thumbnails', blank=True, null=True)
+    thumbnail_url = models.URLField(blank=True, null=True)
     stars = models.ManyToManyField(User, related_name='post_stars', blank=True)
     saves = models.ManyToManyField(User, related_name='post_saves', blank=True)
+    source = models.URLField(blank=True, null=True)
     objects = models.Manager()  # default manager
     PostObjects = PostObjects()  # custom manager
 
@@ -106,6 +108,12 @@ class Post(models.Model):
         if not self.slug:
             self.slug = "{}{}{}".format(slugify(self.title), "-", self.id)
             Post.objects.filter(id=self.id).update(slug=self.slug)
+
+        if not self.thumbnail and self.thumbnail_url:
+            img_temp = NamedTemporaryFile(delete=True)
+            img_temp.write(urlopen(self.thumbnail_url).read())
+            img_temp.flush()
+            self.thumbnail.save(f"thumbnail_of_{self.id}_from_url", File(img_temp))
 
 
 class Comment(models.Model):
