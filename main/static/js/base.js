@@ -55,11 +55,4 @@ $(document).ready(function () {
         window.location = $(this).attr("href");
         return false;
     });
-
-//redirect to post view when click on post title | thumbnail
-    $(".post_item").click(function() {
-      window.location = $(this).find("a").attr("href");
-      return false;
-    });
-
 });

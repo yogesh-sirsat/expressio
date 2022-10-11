@@ -62,7 +62,7 @@
                 </div>
 
             </div>
-            <div class="author-posts col-md-8 mt-2">
+            <div class="author-posts col-md-8 mt-2" id="author-posts-feed">
                 {% if author_posts.count == 0 %}
                     <div class="post">
                         <h1 class="post-title">No Posts Published</h1>
@@ -71,7 +71,7 @@
                     {% for post in author_posts %}
                         <div class="post">
                             <h2 class="post-title">{{ post.title|title }}</h2>
-                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            <img src="/media/{{ post.thumbnail }}" class="post-thumbnail img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
                             {% if post.description %}
                             <p class="post-description mt-2">{{ post.description|safe }}</p>
                             {% endif %}
