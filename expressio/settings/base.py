@@ -183,7 +183,7 @@ GRAPH_MODELS = {
 TINYMCE_DEFAULT_CONFIG = {
     "height": "640px",
     "menubar": False,
-    "plugins": "advlist autolink lists link charmap preview anchor searchreplace code "
+    "plugins": "advlist autolink lists link charmap preview anchor searchreplace codesample code "
     "fullscreen insertdatetime table paste code help wordcount",
     "toolbar": "undo redo preview | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
     "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "

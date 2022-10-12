@@ -3,6 +3,8 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/author_view.css' %}">
     <link rel="stylesheet" href="{% static 'css/post_view.css' %}">
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark-reasonable.min.css">
 {% endblock %}
 
 {% block title %}
@@ -143,8 +145,11 @@
         </div>
 
     </div>
+
 {% endblock %}
 {% block footer %}{% endblock %}
 {% block script %}
     <script src="{% static 'js/post_response.js' %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
 {% endblock %}

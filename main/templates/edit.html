@@ -7,6 +7,8 @@
     {% endblock %}
   {% block head %}
     {{ edit_post.media }}
+    <link rel="stylesheet"
+    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark-reasonable.min.css">
   {% endblock head %}
 {% block body %}
     <div class="container mt-5">
@@ -55,4 +57,7 @@
     </div>
 {% endblock %}
 
-{% block footer %} {% endblock %}
+{% block footer %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+{% endblock %}
