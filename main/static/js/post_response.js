@@ -1,17 +1,8 @@
 
 $(document).ready(function (){
-    let followAuthor = $('#follow-author');
-    let subscribeAuthor = $('#subscribe-author');
     let starPost = $('.star-post');
     let savePost = $('.save-post');
     const current_post_url = $("#postContainer").attr("data-full-path");
-
-    if(subscribeAuthor.attr('value') === 'subscribed'){
-        subscribeAuthor.removeClass('btn-success');
-        subscribeAuthor.addClass('btn-outline-success');
-        $(this).children('i').removeClass('bi-envelope-plus')
-        $(this).children('i').addClass('bi-envelope-check')
-    }
 
 //changing class of star icon as current user starred or not to posts    
     $('.star-post').each(function(){
@@ -99,8 +90,8 @@ $(document).ready(function (){
             success: function(json) {
                 $this.parent().parent().find(".author_followers").html(json["author_followers"] + " Followers");
             },
-            error: function(err) {
-                alert("Error while following author: ", err);
+            error: function() {
+                alert("Error");
             }
         });
 
@@ -118,45 +109,31 @@ $(document).ready(function (){
 
     });
 
-//subscribe and unsubscribe author posts mail later frontEnd section
-    $(document).on('click', '#subscribe-author',function(event){
+//subscribe and unsubscribe authors posts email later frontend section
+    $("#author-profile .subscribe_author, #author .subscribe_author").on('click',function(event){
         event.preventDefault();
-
-        let endpoint = '/' + authorUsername + '/author-view/subscribe-author'
+        const author_username = $(this).parent().attr("data-author-username");
+        const endpoint = '/' + author_username + '/author-view/subscribe-author'
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: {
-                'author_username': authorUsername,
-            },
-            action: 'post',
             dataType: 'json',
-
-            success: function(json) {
-                console.log(json)
-
-            },
-            error: function(xhr, errmsg, err) {
-                console.log('error')
-                console.log(xhr)
-                console.log(errmsg)
-                console.log(err)
+            error: function(xhr, errmsg, error) {
+                console.log(xhr, errmsg, error);
+                alert("Error")
             }
-
         });
 
         if($(this).hasClass('btn-success')){
             $(this).removeClass('btn-success');
             $(this).addClass('btn-outline-success');
-            $(this).children('i').removeClass('bi-envelope-plus')
-            $(this).children('i').addClass('bi-envelope-check')
-            alert('You Will Be Notified Whenever Author Posts')
+            $(this).text('Subscribed');
+            alert(`You Will Be Notified Whenever ${author_username} Posts`)
         }
         else{
             $(this).removeClass('btn-outline-success');
             $(this).addClass('btn-success');
-            $(this).children('i').removeClass('bi-envelope-check')
-            $(this).children('i').addClass('bi-envelope-plus')
+            $(this).text('Subscribe');
         }
 
     });

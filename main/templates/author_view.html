@@ -49,9 +49,15 @@
                                 <button class="btn btn-sm btn-primary mt-2 follow_author">
                                     Follow</button>
                             {% endif %}
-                            <button class="btn btn-sm btn-success mt-2 subscribe_author" value="{{ subscribe_author_status }}">
-                                Subscribe
-                            </button>
+                            {% if user_subscribed_author %}
+                                <button class="btn btn-sm btn-outline-success mt-2 subscribe_author">
+                                    Subscribed
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-success mt-2 subscribe_author">
+                                    Subscribe
+                                </button>
+                            {% endif %}
                         {% endif %}
                     {% else %}
                         <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">

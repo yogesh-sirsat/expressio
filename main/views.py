@@ -199,8 +199,7 @@ def post_view(request, username, slug):
     save_post_satus = 'notSaved'
 
     user_follows_author = author.followers.filter(follower=user).exists()
-    if author.subscribers.filter(id=user.id).exists():
-        subscribe_author_status = 'subscribed'
+    user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
     if post.stars.filter(id=user.id).exists():
         star_post_status = 'starred'
     if post.saves.filter(id=user.id).exists():
@@ -212,7 +211,7 @@ def post_view(request, username, slug):
         'post': post,
         'author': author,
         'user_follows_author': user_follows_author,
-        'subscribe_author_status': subscribe_author_status,
+        'user_subscribed_author': user_subscribed_author,
         'star_post_status': star_post_status,
         'save_post_satus': save_post_satus,
         'total_stars': post.get_total_stars(),
@@ -230,13 +229,12 @@ def author_view(request, username):
     subscribe_author_status = 'notSubscribed'
 
     user_follows_author = author.followers.filter(follower=user).exists()
-    if author.subscribers.filter(id=user.id).exists():
-        subscribe_author_status = 'subscribed'
+    user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
     context = {
         'author_posts': author_posts,
         'author': author,
         'user_follows_author': user_follows_author,
-        'subscribe_author_status': subscribe_author_status,
+        'user_subscribed_author': user_subscribed_author,
     }
     return render(request, 'author_view.html', context)
 
@@ -307,15 +305,16 @@ def follow_author(request, username):
 
 @login_required
 def subscribe_author(request, username):
-    author_username = request.POST.get('author_username')
-    author = User.objects.get(username=author_username)
-    subscription = author.subscribers.filter(id=request.user)
+    author = User.objects.get(username=username)
+    subscription = author.subscribers.filter(subscriber=request.user)
     if subscription.exists():
         subscription.delete()
     else:
         Subscription.objects.create(author=author, subscriber=request.user)
 
-    return JsonResponse({'username': username})
+    author_subscribers = author.subscribers.count()
+
+    return JsonResponse({"author_subscribers": author_subscribers})
 
 
 @login_required
