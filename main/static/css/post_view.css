@@ -12,6 +12,10 @@
     padding: 14px;
 }
 
+.post-content img {
+    width: -webkit-fill-available;
+}
+
 #comment_box {
     border-radius: 8px;
 }
