@@ -55,7 +55,7 @@
                     {% if post.description %}
                     <p class="post-description mb-4">{{ post.description|safe }}</p>
                     {% endif %}
-                    <p class="post-content">{{ post.content|safe }}</p>
+                    <div class="post-content">{{ post.content|safe }}</div>
                 </div>
                 <hr>
                 {% include 'includes/comments_section.html' %}

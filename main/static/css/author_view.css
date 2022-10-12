@@ -12,13 +12,6 @@
     hyphens: auto;
 }
 
-.author-bio {
-    line-height: 98%;
-    color: dimgray;
-    font-size: small;
-    font-family: Times, Times New Roman,sans-serif;
-}
-
 .author-following{
     font-size: small;
 }

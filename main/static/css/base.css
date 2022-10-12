@@ -48,3 +48,14 @@ a:focus {
   border-radius: 6px;
   background-color: lightgray;
 }
+
+.post-title {
+  cursor: pointer;
+}
+
+.author-bio {
+  line-height: 1em;
+  color: dimgray;
+  font-family: Times, Times New Roman,sans-serif;
+}
+

@@ -94,12 +94,16 @@
                     <div class="row justify-content-start">
                         {% for author in who_to_follow %}
                         <div class="col-2 ">
-                            <img class="rounded-circle author-avatar" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
-                            data-holder-rendered="true" href="/{{ author.username }}">
+                            <a href="/{{ author.username }}">
+                                <img class="rounded-circle author-avatar" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
+                                data-holder-rendered="true">
+                            </a>
                         </div>
                         <div class="col-10">
-                            <h6 type="button" class="author-name" href="/{{ author.username }}">{{ author.first_name|capfirst }} {{ author.last_name|capfirst }}</h6>
-                            <p class="author-bio" href="/{{ author.username }}">{{author.bio|slice:"0:75"}}...</p>
+                            <a class="author-name" href="/{{ author.username }}">
+                                <h6>{{ author.first_name|capfirst }} {{ author.last_name|capfirst }}</h6>
+                            </a>
+                            <p class="author-bio">{{ author.profile.bio|safe }}</p>
                         </div>
                         <hr class="mb-2">
                         {% endfor %}
