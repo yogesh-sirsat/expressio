@@ -71,7 +71,9 @@
                     {% for post in author_posts %}
                         <div class="post">
                             <h2 class="post-title">{{ post.title|title }}</h2>
-                            <img src="/media/{{ post.thumbnail }}" class="post-thumbnail img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            {% if post.thumbnail %}
+                                <img src="/media/{{ post.thumbnail }}" class="post-thumbnail img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            {% endif %}
                             {% if post.description %}
                             <p class="post-description mt-2">{{ post.description|safe }}</p>
                             {% endif %}

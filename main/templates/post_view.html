@@ -42,10 +42,14 @@
                         </div>
                     {% endif %}
                     {% if post.source %}
-                        <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                        {% if post.thumbnail %}
+                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                        {% endif %}
                         <p class="post_source mb-4">(Source/Credits: <a href="{{post.source}}">{{post.source|safe}}</a>)</P>
                     {% else %}
-                        <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                        {% if post.thumbnail %}
+                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                        {% endif %}
                     {% endif %}
 
                     {% if post.description %}

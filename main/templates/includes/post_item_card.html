@@ -1,5 +1,7 @@
 <div class="post_item">
-    <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+    {% if post.thumbnail %}
+        <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+    {% endif %}
     <div class="card-body">
         <h5 class="card-title post-title">{{ post.title|title }}</h5>
         {% if post.description %}
