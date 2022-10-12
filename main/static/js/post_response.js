@@ -5,13 +5,6 @@ $(document).ready(function (){
     let starPost = $('.star-post');
     let savePost = $('.save-post');
     const current_post_url = $("#postContainer").attr("data-full-path");
-    let authorUsername = $('#author').attr('value');
-
-    if(followAuthor.attr('value') === 'followed'){
-        followAuthor.removeClass('btn-success');
-        followAuthor.addClass('btn-outline-success');
-        followAuthor.text('Following');
-    }
 
     if(subscribeAuthor.attr('value') === 'subscribed'){
         subscribeAuthor.removeClass('btn-success');
@@ -93,42 +86,32 @@ $(document).ready(function (){
         window.location = $(this).attr("href");
         return false;
     });
-//follow and unfollow author frontEnd section
-    $(document).on('click', '#follow-author',function(event){
+//follow and unfollow author frontend section
+    $("#author-profile .follow_author, #author .follow_author").on("click",function(event){
         event.preventDefault();
-
-        let endpoint = '/' + authorUsername + '/author-view/follow-author'
+        const $this = $(this);
+        const author_username = $(this).parent().attr("data-author-username");
+        const endpoint = '/' + author_username + '/author-view/follow-author';
         $.ajax({
             type: 'POST',
             url: endpoint,
-            data: {
-                'author_username': authorUsername,
-            },
-            action: 'post',
             dataType: 'json',
-
             success: function(json) {
-                let authorFollowers = document.getElementById('author-followers')
-                authorFollowers.innerHTML = json['author_followers'] + ' Followers'
-
+                $this.parent().parent().find(".author_followers").html(json["author_followers"] + " Followers");
             },
-            error: function(xhr, errmsg, err) {
-                console.log('error')
-                console.log(xhr)
-                console.log(errmsg)
-                console.log(err)
+            error: function(err) {
+                alert("Error while following author: ", err);
             }
-
         });
 
-        if($(this).hasClass('btn-success')){
-            $(this).removeClass('btn-success');
-            $(this).addClass('btn-outline-success');
+        if($(this).hasClass('btn-primary')){
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-outline-primary');
             $(this).text('Following');
         }
         else{
-            $(this).removeClass('btn-outline-success');
-            $(this).addClass('btn-success');
+            $(this).removeClass('btn-outline-primary');
+            $(this).addClass('btn-primary');
             $(this).text('Follow');
 
         }

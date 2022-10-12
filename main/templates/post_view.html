@@ -61,7 +61,7 @@
                 {% include 'includes/comments_section.html' %}
             </div>
             <div class="author col mt-5" id="author" value="{{ author.username }}">
-                <div class="position-sticky" style="top: 2rem;">
+                <div class="position-sticky row" style="top: 2rem;">
                     <div>
                         <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar"
                                 src="/media/{{ author.profile.avatar }}" id="author-avatar" href="/{{ author.username }}">
@@ -76,23 +76,30 @@
                     </div>
  {# Author Follow And Subscribe Status Section #}
                     <div>
-                        <h6 type="button" class="mt-2" id="author-followers" data-bs-toggle="modal" data-bs-target="#authorFollowersModal">{{ author.followers.count }} Followers</h6>
+                        <h6 type="button" class="mt-2 author_followers" data-bs-toggle="modal" data-bs-target="#authorFollowersModal">{{ author.followers.count }} Followers</h6>
+                    </div>
+                    <div data-author-username="{{ author.username }}">
                         {% if user.is_authenticated %}
                             {% if author == request.user %}
-                                <button class="btn btn-sm btn-success mt-2" disabled>
+                                <button class="btn btn-sm btn-primary mt-2" disabled>
                                 Follow</button>
                                 <button class="btn btn-sm btn-success mt-2" disabled>
                                     Subscribe
                                 </button>
                             {% else %}
-                                <button class="btn btn-sm btn-success mt-2" id="follow-author" value="{{ follow_author_status }}" >
-                                    Follow</button>
-                                <button class="btn btn-sm btn-success mt-2" id="subscribe-author" value="{{ subscribe_author_status }}">
+                                {% if user_follows_author %}
+                                    <button class="btn btn-sm btn-outline-primary mt-2 follow_author" >
+                                        Following</button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-primary mt-2 follow_author" >
+                                        Follow</button>
+                                {% endif %}
+                                <button class="btn btn-sm btn-success mt-2 subscribe_author" value="{{ subscribe_author_status }}">
                                     Subscribe
                                 </button>
                             {% endif %}
                         {% else %}
-                            <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
+                            <button class="btn btn-sm btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
                             Follow</button>
                             <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
                                 Subscribe

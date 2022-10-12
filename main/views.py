@@ -194,13 +194,11 @@ def post_view(request, username, slug):
     post = Post.objects.get(slug=slug)
     author = get_object_or_404(User, username=username)
     user = request.user
-    follow_author_status = 'notFollowed'
     subscribe_author_status = 'notSubscribed'
     star_post_status = 'notStarred'
     save_post_satus = 'notSaved'
 
-    if author.followers.filter(id=user.id).exists():
-        follow_author_status = 'followed'
+    user_follows_author = author.followers.filter(follower=user).exists()
     if author.subscribers.filter(id=user.id).exists():
         subscribe_author_status = 'subscribed'
     if post.stars.filter(id=user.id).exists():
@@ -213,7 +211,7 @@ def post_view(request, username, slug):
     context = {
         'post': post,
         'author': author,
-        'follow_author_status': follow_author_status,
+        'user_follows_author': user_follows_author,
         'subscribe_author_status': subscribe_author_status,
         'star_post_status': star_post_status,
         'save_post_satus': save_post_satus,
@@ -229,17 +227,15 @@ def author_view(request, username):
     author_posts = author.posts.filter(status="published")
     user = request.user
 
-    follow_author_status = 'notFollowed'
     subscribe_author_status = 'notSubscribed'
 
-    if author.followers.filter(id=user.id).exists():
-        follow_author_status = 'followed'
+    user_follows_author = author.followers.filter(follower=user).exists()
     if author.subscribers.filter(id=user.id).exists():
         subscribe_author_status = 'subscribed'
     context = {
         'author_posts': author_posts,
         'author': author,
-        'follow_author_status': follow_author_status,
+        'user_follows_author': user_follows_author,
         'subscribe_author_status': subscribe_author_status,
     }
     return render(request, 'author_view.html', context)
@@ -297,12 +293,11 @@ def save_post(request, username, slug):
 
 @login_required
 def follow_author(request, username):
-    author_username = request.POST.get('author_username')
-    author = User.objects.get(username=author_username)
+    author = User.objects.get(username=username)
     user = request.user
     follow_relation = author.followers.filter(follower=user)
     if follow_relation.exists():
-        follow_relation.delete();
+        follow_relation.delete()
     else:
         Follow.objects.create(follower=user, following=author)
 
