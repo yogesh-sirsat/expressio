@@ -4,6 +4,8 @@
 *.pyc
 expressio/__pycache__/
 main/__pycache__/
+media/
+backup_files/
 # db.sqlite3
 
 # Third-party apps #
