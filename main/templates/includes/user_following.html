@@ -9,14 +9,16 @@
       </div>
       <div class="modal-body">
           <div class="container">
-              <div class="row justify-content-start">
-                {% for follow_ralation in author.followings.all %}
-                    <div class="col-2 ">
-                        <img class="rounded-circle user-avatar" alt="user-avatar" src="/media/{{ follow_relation.following.profile.avatar }}" height="36" width="36"
-                             data-holder-rendered="true" href="/{{ follow_raletion.following.username }}">
+              <div class="row">
+                {% for follow_reletion in author.followings.all %}
+                    <div class="col-md-auto">
+                      <a href="/{{ follow_reletion.following.username }}">
+                        <img class="rounded-circle user-avatar" alt="user-avatar" src="/media/{{ follow_reletion.following.profile.avatar }}" height="36" width="36"
+                             data-holder-rendered="true">
+                      </a>
                     </div>
-                    <div class="col-10">
-                        <h6 type="button" class="user-name" href="/{{ follow_raletion.following.username }}">{{ follow_raletion.following.first_name }} {{ follow_raletion.following.last_name }}</h6>
+                    <div class="col">
+                        <h6 type="button" class="user-name" href="/{{ follow_reletion.following.username }}">{{ follow_reletion.following.first_name }} {{ follow_reletion.following.last_name }}</h6>
                     </div>
                 <hr class="mb-2 mt-2">
                 {% endfor %}
