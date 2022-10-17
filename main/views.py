@@ -151,10 +151,15 @@ def write(request, username):
 
 @login_required
 def unpublish(request, username, slug):
-    post = Post.objects.get(slug=slug)
-    post.status = 'draft'
-    post.save();
-    return redirect('author_view', username);
+    post = get_object_or_404(Post, slug=slug)
+    if(request.user.id is post.author.id):
+        post_title = post.title
+        post.status = 'draft'
+        post.save()
+        messages.success(request, f'<b>{post_title}</b> successfully drafted.')
+    else:
+        messages.error(request, 'Only author can unpublish their posts.')
+    return redirect(reverse('author_view', kwargs={'username': username}))
 
 @login_required
 def edit(request, username, slug):
@@ -194,16 +199,18 @@ def post_view(request, username, slug):
     post = Post.objects.get(slug=slug)
     author = get_object_or_404(User, username=username)
     user = request.user
-    subscribe_author_status = 'notSubscribed'
+    user_follows_author = False
+    user_subscribed_author = False
     star_post_status = 'notStarred'
     save_post_satus = 'notSaved'
 
-    user_follows_author = author.followers.filter(follower=user).exists()
-    user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
-    if post.stars.filter(id=user.id).exists():
-        star_post_status = 'starred'
-    if post.saves.filter(id=user.id).exists():
-        save_post_satus = 'saved'
+    if user.is_authenticated:
+        user_follows_author = author.followers.filter(follower=user).exists()
+        user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
+        if post.stars.filter(id=user.id).exists():
+            star_post_status = 'starred'
+        if post.saves.filter(id=user.id).exists():
+            save_post_satus = 'saved'
     
     post_comments = post.comments.all()
 
@@ -224,18 +231,18 @@ def post_view(request, username, slug):
 def author_view(request, username):
     author = get_object_or_404(User, username=username)
     author_posts = author.posts.filter(status="published")
-    user = request.user
 
-    subscribe_author_status = 'notSubscribed'
-
-    user_follows_author = author.followers.filter(follower=user).exists()
-    user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
     context = {
         'author_posts': author_posts,
         'author': author,
-        'user_follows_author': user_follows_author,
-        'user_subscribed_author': user_subscribed_author,
     }
+    if request.user.is_authenticated:
+        user = request.user
+        user_follows_author = author.followers.filter(follower=user).exists()
+        user_subscribed_author = author.subscribers.filter(subscriber=user).exists()
+        context['user_follows_author'] = user_follows_author
+        context['user_subscribed_author'] = user_subscribed_author
+
     return render(request, 'author_view.html', context)
 
 
