@@ -12,13 +12,13 @@
         {% include "includes/user_followers.html" %}
         {% include "includes/user_following.html" %}
         <div class="row">
-            <div class="author col-md-2 mt-5" id="author-profile" value="{{ author.username }}">
+            <div class="author col mt-5" id="author-profile" value="{{ author.username }}">
                 <div class="position-sticky" style="top: 2rem;">
-                    <div class="row">
-                        <div class="col">
+                    <div class="col-md-12">
+                        <div class="">
                             <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar" src="/media/{{ author.profile.avatar }}">
                         </div>
-                        <div class="col">
+                        <div class="col-md-12">
                             <h5 class="author-name text-center">
                                 {{ author.first_name|capfirst }} {{ author.last_name|capfirst }}
                             </h5>
@@ -71,7 +71,7 @@
                 </div>
 
             </div>
-            <div class="author-posts col-md-8 mt-2" id="author-posts-feed">
+            <div class="author-posts col-md-9 mt-2" id="author-posts-feed">
                 {% if author_posts.count == 0 %}
                     <div class="post">
                         <h1 class="post-title">No Posts Published</h1>
@@ -93,7 +93,8 @@
                             <div class="col-auto">
                                 {% if user == post.author %}
                                     <a class="btn btn-sm btn-outline-dark" role="button" href="{% url 'edit' user.username post.slug %}">Edit</a>
-                                    <a class="btn btn-sm btn-outline-danger" role="button" href="{% url 'unpublish' user.username post.slug %}">Unpublish</a>
+                                    <a class="btn btn-sm btn-outline-warning" role="button" href="{% url 'unpublish' user.username post.slug %}">Unpublish</a>
+                                    <a class="btn btn-sm btn-outline-danger" role="button" href="{% url 'delete_post' user.username post.slug %}">Delete</a>
                                 {% endif %}
                             </div>    
                             <div class="col-auto fs-4" >

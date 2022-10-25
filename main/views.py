@@ -194,6 +194,17 @@ def edit(request, username, slug):
     }
     return render(request, 'edit.html', context)
 
+@login_required
+def delete_post(request, username, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if(request.user.id is post.author.id):
+        post_title = post.title
+        post.delete()
+        messages.success(request, f'<b>{post_title}</b> successfully deleted')
+    else:
+        messages.error(request, 'Only author can delete their posts.')
+    return redirect(reverse('author_view', kwargs={'username': username}))
+
 
 def post_view(request, username, slug):
     post = Post.objects.get(slug=slug)
@@ -345,3 +356,4 @@ def reply_comment(request, username, slug):
     reply_item = render_to_string('includes/reply_item.html', {'reply': reply_comment}, request=request)
 
     return JsonResponse({'reply_item': reply_item})
+    

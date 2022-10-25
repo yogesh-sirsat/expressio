@@ -15,6 +15,7 @@ urlpatterns = [
   path('<str:username>/write', views.write, name='write'),
   path('<str:username>/<slug:slug>/unpublish', views.unpublish, name='unpublish'),
   path('<str:username>/<slug:slug>/edit', views.edit, name='edit'),
+  path('<str:username>/<slug:slug>/delete', views.delete_post, name='delete_post'),
   path('<str:username>/<slug:slug>', views.post_view, name='post_view'),
   path('<str:username>/<slug:slug>/star-post', views.star_post, name='star_post'),
   path('<str:username>/<slug:slug>/save-post', views.save_post, name='save_post'),
