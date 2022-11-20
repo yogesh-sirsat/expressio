@@ -93,6 +93,17 @@ def sign_in_user(request):
         return render(request, 'main_page.html')
 
 
+def tag_view(request, tag):
+    tag_specific_posts = Post.objects.filter(tags__name=tag)
+
+    context = {
+        'tag_posts': tag_specific_posts,
+        'requested_tag': tag,
+    }
+
+    return render(request, 'tag_posts.html', context)
+
+
 @login_required
 def user_profile(request, username):
     if request.method == 'POST':
@@ -356,4 +367,3 @@ def reply_comment(request, username, slug):
     reply_item = render_to_string('includes/reply_item.html', {'reply': reply_comment}, request=request)
 
     return JsonResponse({'reply_item': reply_item})
-    

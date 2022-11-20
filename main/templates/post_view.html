@@ -36,8 +36,10 @@
                     </div>
                     {% if post.tags %}
                         <div class="hstack post_tags gap-3 mt-2">
-                            {% for tag in post.tags.names %}
-                            <div class="tag border">{{ tag }}</div>
+                            {% for tag in post.tags.all %}
+                            <a class="tag_slug" href="/tag/{{ tag.slug }}">
+                                <div class="tag border">{{ tag.name }}</div>
+                            </a>
                             {% endfor %}
                         </div>
                     {% endif %}

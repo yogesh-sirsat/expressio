@@ -53,6 +53,10 @@ a:focus {
   background-color: lightgray;
 }
 
+.post_tags .tag_slug {
+  text-decoration: none;
+}
+
 .post-title {
   cursor: pointer;
 }
