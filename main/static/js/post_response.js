@@ -222,7 +222,7 @@ $(document).ready(function (){
         $(this).attr("rows", "4");
     });
 
-    $("#comments-section .reply_box").focus(function () { 
+    $(document).on("focus", "#comments-section .reply_box", function () { 
         $(this).attr("rows", "4");        
     });
 
@@ -253,19 +253,19 @@ $(document).ready(function (){
         });
     });
 
-    $("#comments-section .comment_replies").on("click", function (event) {
+    $(document).on("click", "#comments-section .comment_replies", function (event) {
         event.preventDefault();
         const parent_comment = ($(this).parent().attr("data-comment-id"));
         $("#replies-of-"+parent_comment).toggle();
     });
 
-    $("#comments-section .reply_btn").on("click", function (event) {
+    $(document).on("click", "#comments-section .reply_btn", function (event) {
         event.preventDefault();
         const parent_comment = ($(this).parent().parent().attr("data-comment-id"));
         $("#reply-form-of-"+parent_comment).toggle();
     });
 
-    $("#comments-section .post_reply").on("click", function (event) {
+    $(document).on("click", "#comments-section .post_reply", function (event) {
         event.preventDefault();
         const parent_comment = $(this).attr("data-comment-id");
         const reply_input_elem = $("#reply-form-of-"+parent_comment+" .reply_box");

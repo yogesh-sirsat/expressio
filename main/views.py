@@ -352,7 +352,7 @@ def comment_post(request, username, slug):
     comment_content = request.POST.get('content')
 
     comment = Comment.objects.create(author=request.user, post=post, content=comment_content)
-    comment_item = render_to_string('includes/comment_item.html', {'comment': comment}, request=request)
+    comment_item = render_to_string('includes/comment_item.html', {'comment': comment, 'post': post,}, request=request)
 
     return JsonResponse({'comment_item': comment_item})
 
