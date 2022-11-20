@@ -367,3 +367,27 @@ def reply_comment(request, username, slug):
     reply_item = render_to_string('includes/reply_item.html', {'reply': reply_comment}, request=request)
 
     return JsonResponse({'reply_item': reply_item})
+
+
+@login_required
+def user_starred_posts(request, username):
+    user = User.objects.get(username=username)
+    posts = user.post_stars.all()
+
+    context = {
+        "posts": posts,
+    }
+
+    return render(request, 'user_starred_posts.html', context)
+
+
+@login_required
+def user_saved_posts(request, username):
+    user = User.objects.get(username=username)
+    posts = user.post_saves.all()
+
+    context = {
+        "posts": posts,
+    }
+
+    return render(request, 'user_saved_posts.html', context)

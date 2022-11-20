@@ -50,7 +50,8 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                     <li><a class="dropdown-item" href="/{{ user.username }}/profile">Edit Profile</a></li>
                     <li><a class="dropdown-item" href="/{{ user.username }}">Profile View</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="/{{user.username}}/profile/starred-posts">Starred Posts</a></li>
+                    <li><a class="dropdown-item" href="/{{user.username}}/profile/saved-posts">Saved Posts</a></li>
                         <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="/logout?next={{request.path}}">Log Out</a></li>
                   </ul>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %} 
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <h1 class="header">You saved posts.</h1>
+    <hr>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="row">
+                {% for post in posts %}
+                    <div class="col-md-12 mb-2">
+                        <div class="card">
+    
+                            {% include "includes/post_item_card.html" %}
+    
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+{% block script %}
+    <script src="{% static 'js/main_page.js' %}"></script>
+    <script src="{% static 'js/feed_view.js' %}"></script>
+    <script src="{% static 'js/post_response.js' %}"></script>
+{% endblock %}
