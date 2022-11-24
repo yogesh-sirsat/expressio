@@ -94,7 +94,7 @@ def sign_in_user(request):
 
 
 def tag_view(request, tag):
-    tag_specific_posts = Post.objects.filter(tags__name=tag)
+    tag_specific_posts = Post.objects.filter(tags__slug=tag)
 
     context = {
         'tag_posts': tag_specific_posts,
