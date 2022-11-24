@@ -2,6 +2,10 @@ html {
   overflow-y: scroll;
 }
 
+body {
+  background-color: rgb(232, 234, 235);
+}
+
 .navbar-nav.navbar-center {
             position: absolute;
             left: 50%;
@@ -65,5 +69,9 @@ a:focus {
   line-height: 1em;
   color: dimgray;
   font-family: Times, Times New Roman,sans-serif;
+}
+
+.card {
+  background-color: whitesmoke;
 }
 
