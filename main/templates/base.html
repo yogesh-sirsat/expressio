@@ -47,7 +47,7 @@
           {% if user.is_authenticated %}
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle profile_dropdown"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img class="rounded-circle" alt="user-profile" src="/media/{{ user.profile.avatar }}" height="36" width="36"
                 data-holder-rendered="true">
                 {{ user.username }}
@@ -170,7 +170,7 @@
                       {% csrf_token %}
                    </div>
                   <div class="modal-footer">
-                    <a class="nav-link" style="color: gray" data-bs-toggle="modal" data-bs-target="#signUpModal">Get Started</a>
+                    <a class="nav-link" role="button" style="color: gray" data-bs-toggle="modal" data-bs-target="#signUpModal">Get Started</a>
                     <button type="submit" class="btn btn-outline-dark">Sign In</button>
                   </div>
                 </form>
