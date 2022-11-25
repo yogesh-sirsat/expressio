@@ -5,3 +5,7 @@
 .author-name {
     text-decoration: none;
 }
+
+.post-response .comment_post {
+    text-decoration: none;
+}

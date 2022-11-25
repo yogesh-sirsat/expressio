@@ -68,6 +68,15 @@
                 </small>
             {% endif %}
         </div>
+        <div class="col-auto post-response fs-6">
+            <a class="comment_post" href="/{{post.author.username}}/{{post.slug}}#comments-section">
+                <i class="bi bi-chat">
+                </i>
+            </a>
+            <small class="post-response post-response-save">
+                {{ post.comments.count }}
+            </small>
+        </div>
     </div>
 
  </div>

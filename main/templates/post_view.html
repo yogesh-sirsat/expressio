@@ -131,11 +131,7 @@
                                 </p>
                             {% endif %}
                         </div>
-                        {% if user.is_authenticated %}
                         <div class="col post-response fs-4 text-center">
-                        {% else %}
-                        <div class="col post-response fs-4" role="button" data-bs-toggle="modal" data-bs-target="#signInModal">
-                        {% endif %}
                             <a role="button" href="#comments-section">
                                 <i class="bi bi-chat"></i>
                             </a>
