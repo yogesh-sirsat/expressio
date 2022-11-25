@@ -3,11 +3,20 @@
         <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
     {% endif %}
     <div class="card-body">
-        <h5 class="card-title post-title">{{ post.title|title }}</h5>
-        {% if post.description %}
-        <p class="card-text post-description">
-            {{ post.description|safe|slice:"0:320" }}
-        </p>
+        {% if is_search_result %}
+            <h5 class="card-title post-title">{{ post.title_headline|safe|title }}</h5>
+            <p class="card-text post-description">
+                {{ post.description_headline|safe }}
+                <br>
+                {{ post.content_headline|safe }}
+            </p>
+        {% else %}
+            <h5 class="card-title post-title">{{ post.title|title }}</h5>
+            {% if post.description %}
+            <p class="card-text post-description">
+                {{ post.description|safe }}
+            </p>
+            {% endif %}
         {% endif %}
         <div class="row">
             {% if post.tags %}

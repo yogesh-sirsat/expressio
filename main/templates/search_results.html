@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %} 
+    <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container mt-4">
+    <h1 class="searched_text">{{ searched_text }}</h1>
+    <hr>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="row">
+                {% if search_results %}
+                    {% for post in search_results %}
+                    <div class="col-md-12 mb-2">
+                        <div class="card">
+                            
+                            {% include "includes/post_item_card.html" with is_search_result=True %}
+                            
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <h3>No search results available for exact "<strong>{{ searched_text }}</strong>".</h3>
+                {% endif %}
+                {% if similar_search_results %}
+                    <hr>
+                    <h3>Close to similar search results.</h3>
+                    {% for post in similar_search_results %}
+                        <div class="col-md-12 mb-2">
+                            <div class="card">
+                                
+                                {% include "includes/post_item_card.html" %}
+                                
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+{% block script %}
+    <script src="{% static 'js/main_page.js' %}"></script>
+    <script src="{% static 'js/feed_view.js' %}"></script>
+    <script src="{% static 'js/post_response.js' %}"></script>
+{% endblock %}

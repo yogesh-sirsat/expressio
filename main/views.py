@@ -10,9 +10,12 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Count
+from django.db.models import Count, Exists, Q
+from django.db.models.functions import Greatest
 from main.forms import UserForm, ProfileForm, PostContentForm, PostForm
 from main.models import *
+from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
+from django.contrib.postgres.search import TrigramSimilarity
 
 
 def home(request):
@@ -391,3 +394,40 @@ def user_saved_posts(request, username):
     }
 
     return render(request, 'user_saved_posts.html', context)
+
+
+def search_view(request):
+    search_results = []
+    similar_search_results = []
+    if request.method == "GET":
+        searched_text = request.GET.get('search-input')
+        query = SearchQuery(searched_text)
+        vector = SearchVector('title','tags__name', 'description', 'content')
+        expressions = ('title','tags__name', 'description', 'content')
+        title_headline = SearchHeadline('title', query, start_sel='<mark>', stop_sel='</mark>')
+        description_headline = SearchHeadline('description', query, start_sel='<mark>', stop_sel='</mark>')
+        content_headline = SearchHeadline('content', query, start_sel='<mark>', stop_sel='</mark>')
+        search_results = Post.objects.annotate(
+            search=vector, title_headline=title_headline, description_headline=description_headline, content_headline=content_headline
+        ).filter(search=query)
+        search_results = set(search_results)
+
+        if(len(search_results) <= 10):
+            search_results_ids = {post.id for post in search_results}
+            similar_search_results = Post.objects.exclude(id__in=search_results_ids).annotate(similarity=Greatest(
+                TrigramSimilarity('title', searched_text), 
+                TrigramSimilarity('tags__name', searched_text), 
+                TrigramSimilarity('description', searched_text),
+                TrigramSimilarity('content', searched_text)),
+            ).filter(
+                Q(similarity__gte=0.1)
+            ).order_by('-similarity').distinct()
+
+
+    context = {
+        "searched_text": searched_text,
+        "search_results": search_results,
+        "similar_search_results": similar_search_results,
+    }
+
+    return render(request, 'search_results.html', context)

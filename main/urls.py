@@ -10,6 +10,7 @@ urlpatterns = [
   path('signup', views.sign_up_user, name='sign_up_user'),
   path('signin', views.sign_in_user, name='sign_in_user'),
   path('logout', auth_views.LogoutView.as_view(), name='logout'),
+  path('search/', views.search_view, name='search_view'),
   path('tag/<slug:tag>', views.tag_view, name='tag_view'),
   path('<str:username>', views.author_view, name='author_view'),
   path('<str:username>/profile', views.user_profile, name='user_profile'),

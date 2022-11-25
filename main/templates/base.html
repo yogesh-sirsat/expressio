@@ -40,8 +40,8 @@
                   </li>
               {% endif %}
           </ul>
-            <form class="d-flex w-50" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex w-50" role="search" action="{% url 'search_view' %}" method="get" >
+                <input class="form-control me-2" name="search-input" type="search" placeholder="Search" aria-label="Search" required>
                 <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
             </form>
           {% if user.is_authenticated %}
