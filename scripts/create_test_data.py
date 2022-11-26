@@ -19,6 +19,9 @@ ARTICLE_COUNTER = 2
 # Number of users to create.
 USER_COUNTER = 1
 
+# Save post flag
+SAVE_FLAG = True
+
 
 class MakeApiCall:
 
@@ -85,7 +88,23 @@ class MakeApiCall:
             print("Error while creating new user from data.")
             return {}
 
+
+    def make_user_star_post(self, user, post):
+        try:
+            post.stars.add(user)
+            print(f"{user.username} starred the post.")
+        except:
+            print(f"{user.username} failed to star the post.    ")
+
+    def make_user_save_post(self, user, post):
+        try:
+            post.saves.add(user)
+            print(f"{user.username} saved the post.")
+        except:
+            print(f"{user.username} failed to save the post.")
+
     def create_comments_from_article_data(self, comment_data_obj, parent_post, parent_comment=False):
+        global SAVE_FLAG
         try:
             for data_obj in comment_data_obj:
                 comment_user = User.objects.filter(username=data_obj["user"]["username"])
@@ -97,6 +116,13 @@ class MakeApiCall:
                     if not comment_author:
                         comment_author = ADMIN_USER
                         print(f"Using admin user as a comment author.")
+
+                self.make_user_star_post(comment_author, parent_post)
+
+                if(SAVE_FLAG):
+                    self.make_user_save_post(comment_author, parent_post)
+                    SAVE_FLAG = not SAVE_FLAG
+
                 comment_content = md.markdown(mdfy.markdownify(data_obj["body_html"], heading_style="ATX"))
                 if not parent_comment:
                     new_comment = Comment.objects.create(author=comment_author, post=parent_post,
@@ -206,9 +232,10 @@ class MakeApiCall:
 def make_api_call_for_articles():
     # Make api call for articles.
 
-    # Counter: 150589 - 150740, 160740 - 
+    # Counter: 150589 - 150740, 160740 -  160803
+    SAVE_FLAG = True
     init_count = ARTICLE_COUNTER
-    article_id = 160740
+    article_id =  160804
     while ARTICLE_COUNTER:
         MakeApiCall(f"{DEV_API}/articles/{article_id}")
         article_id += 1
