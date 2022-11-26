@@ -22,7 +22,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar', null=True)
     avatar_url = models.URLField(null=True, blank=True)
-    bio = models.TextField(max_length=500, default="")
+    bio = models.TextField(max_length=500, default="", blank=True)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

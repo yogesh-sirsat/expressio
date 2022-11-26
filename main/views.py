@@ -123,10 +123,13 @@ def user_profile(request, username):
             profile_form.avatar = request.FILES['avatar']
         profile_form.bio = request.POST['bio']
 
-        if user_form.is_valid() and profile_form.is_valid():
+        try:
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your Profile Is Successfully Updated')
+            return redirect('user_profile', user_form.username)
+        except:
+            messages.error(request, 'Sorry, your profile updating failed!')
             return redirect('user_profile', user_form.username)
 
     return render(request, 'user_profile.html', {'username': username})
