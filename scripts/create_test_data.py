@@ -103,6 +103,19 @@ class MakeApiCall:
         except:
             print(f"{user.username} failed to save the post.")
 
+
+    def make_user_follow_author(self, user, author):
+        follow_relation = author.followers.filter(follower=user)
+        if follow_relation.exists():
+            print(f"{user.username} have already follow relation with {author.username}.")
+        else:
+            try:
+                Follow.objects.create(following=author, follower=user)
+                print(f"{user.username} created new follow relation with {author.username}.")
+            except:
+                print(f"{user.username} failed to create new follow relation with {author.username}.")
+
+
     def create_comments_from_article_data(self, comment_data_obj, parent_post, parent_comment=False):
         global SAVE_FLAG
         try:
@@ -122,6 +135,8 @@ class MakeApiCall:
                 if(SAVE_FLAG):
                     self.make_user_save_post(comment_author, parent_post)
                     SAVE_FLAG = not SAVE_FLAG
+                
+                self.make_user_follow_author(comment_author, parent_post.author)
 
                 comment_content = md.markdown(mdfy.markdownify(data_obj["body_html"], heading_style="ATX"))
                 if not parent_comment:
@@ -232,10 +247,10 @@ class MakeApiCall:
 def make_api_call_for_articles():
     # Make api call for articles.
 
-    # Counter: 150589 - 150740, 160740 -  160803
+    # Counter: 150589 - 150740, 160740 -  160809
     SAVE_FLAG = True
     init_count = ARTICLE_COUNTER
-    article_id =  160804
+    article_id =  160810
     while ARTICLE_COUNTER:
         MakeApiCall(f"{DEV_API}/articles/{article_id}")
         article_id += 1
