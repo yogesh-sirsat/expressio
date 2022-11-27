@@ -22,7 +22,7 @@ def home(request):
     all_posts = Post.objects.filter(status="published")
     user = request.user
 
-    who_to_follow = User.objects.annotate(Count('followers')).order_by('followers')[0:5]
+    who_to_follow = User.objects.annotate(count=Count("followers")).order_by("-count")[:5]
 
     # for the future pending work
     # all_posts_paginator = Paginator(all_posts, 2)
