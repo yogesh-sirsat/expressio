@@ -135,6 +135,8 @@ class MakeApiCall:
                 if(SAVE_FLAG):
                     self.make_user_save_post(comment_author, parent_post)
                     SAVE_FLAG = not SAVE_FLAG
+                else:
+                    SAVE_FLAG = True
                 
                 self.make_user_follow_author(comment_author, parent_post.author)
 
@@ -248,6 +250,7 @@ def make_api_call_for_articles():
     # Make api call for articles.
 
     # Counter: 150589 - 150740, 160740 -  160809
+    # Prod counter: 160812 - 161046
     SAVE_FLAG = True
     init_count = ARTICLE_COUNTER
     article_id =  160810
