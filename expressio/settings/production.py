@@ -1,5 +1,3 @@
 from .base import *
 
-DEBUG = False
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.expressio.live']
-
+ALLOWED_HOSTS = [os.getenv('IP_ADDRESS') ,'localhost', '127.0.0.1']
