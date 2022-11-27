@@ -24,6 +24,8 @@ def home(request):
 
     who_to_follow = User.objects.annotate(count=Count("followers")).order_by("-count")[:5]
 
+    most_contributors = User.objects.annotate(count=Count("posts")).order_by("-count")[:5]
+
     # for the future pending work
     # all_posts_paginator = Paginator(all_posts, 2)
     # following_authors_posts_paginator = Paginator(following_authors_posts,2)
@@ -37,6 +39,7 @@ def home(request):
     context = {
         'all_posts': all_posts,
         'who_to_follow': who_to_follow,
+        'most_contributors': most_contributors,
     }
 
     if request.user.is_authenticated:

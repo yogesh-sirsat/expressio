@@ -88,25 +88,50 @@
             <hr class="mb-6">
             </div>
             <div class="col-md-3">
-                <div class="who_to_follow position-sticky">
-                    <h4>Top authors</h4>
-                    <hr>
-                    <div class="row">
-                        {% for author in who_to_follow %}
-                        <div class="col-2 ">
-                            <a href="/{{ author.username }}">
-                                <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
-                                data-holder-rendered="true">
-                            </a>
+                <div class="position-sticky" id="right-side-bar">
+                    <div class="right_side_bar">
+                        <div class="who_to_follow">
+                            <h4>Top authors</h4>
+                            <hr>
+                            <div class="row">
+                                {% for author in who_to_follow %}
+                                <div class="col-2 ">
+                                    <a href="/{{ author.username }}">
+                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
+                                        data-holder-rendered="true">
+                                    </a>
+                                </div>
+                                <div class="col-10">
+                                    <a class="author-name" href="/{{ author.username }}">
+                                        <h6>{{ author.first_name|capfirst }} {{ author.last_name|capfirst }}</h6>
+                                    </a>
+                                    <p class="author-bio">{{ author.profile.bio|safe }}</p>
+                                </div>
+                                <hr>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div class="col-10">
-                            <a class="author-name" href="/{{ author.username }}">
-                                <h6>{{ author.first_name|capfirst }} {{ author.last_name|capfirst }}</h6>
-                            </a>
-                            <p class="author-bio">{{ author.profile.bio|safe }}</p>
+                        <div class="most_contributors">
+                            <h4>Most contributors</h4>
+                            <hr>
+                            <div class="row">
+                                {% for author in most_contributors %}
+                                <div class="col-2 ">
+                                    <a href="/{{ author.username }}">
+                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
+                                        data-holder-rendered="true">
+                                    </a>
+                                </div>
+                                <div class="col-10">
+                                    <a class="author-name" href="/{{ author.username }}">
+                                        <h6>{{ author.first_name|capfirst }} {{ author.last_name|capfirst }}</h6>
+                                    </a>
+                                    <p class="author-bio">{{ author.profile.bio|safe }}</p>
+                                </div>
+                                <hr>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <hr>
-                        {% endfor %}
                     </div>
                 </div>
             </div>

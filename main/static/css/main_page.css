@@ -10,6 +10,12 @@
     text-decoration: none;
 }
 
-.who_to_follow {
+#right-side-bar {
     top: 4rem;
+}
+
+.right_side_bar {
+    padding-right: 1rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
 }
