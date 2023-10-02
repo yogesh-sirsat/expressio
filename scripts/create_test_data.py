@@ -7,7 +7,7 @@ import requests
 from main.models import *
 
 DEV_API = "https://dev.to/api"
-ADMIN_USER = User.objects.get(username="yogesh")
+ADMIN_USER = User.objects.get(pk=1)
 
 # Creating test data from dev.to api's instead of lorem ipsum data just to give small real touch to
 # whoever browsing the project, this data from dev.to is not getting used for any traffic or ads, its
@@ -76,8 +76,9 @@ class MakeApiCall:
             new_user = new_user_data["username"]
             new_user_email = f"{new_user}@expressio.live"
             new_user_password = f"{os.getenv('DUMMY_PASSWORD_PREFIX')}{new_user}"
-            user = User.objects.create(
-                username=new_user, first_name=new_user_data["name"], email=new_user_email, password=new_user_password)
+            user = User.objects.create_user(new_user, new_user_email, new_user_password)
+            user.first_name = new_user_data["name"]
+            user.save()
             if (new_user_data["summary"]):
                 user.profile.bio = new_user_data["summary"]
                 user.profile.save(update_fields=["bio"])
@@ -129,16 +130,17 @@ class MakeApiCall:
                     if not comment_author:
                         comment_author = ADMIN_USER
                         print(f"Using admin user as a comment author.")
-
-                self.make_user_star_post(comment_author, parent_post)
-
-                if(SAVE_FLAG):
-                    self.make_user_save_post(comment_author, parent_post)
-                    SAVE_FLAG = not SAVE_FLAG
-                else:
-                    SAVE_FLAG = True
                 
-                self.make_user_follow_author(comment_author, parent_post.author)
+                if(comment_user != parent_post.author):
+                    self.make_user_star_post(comment_author, parent_post)
+
+                    if(SAVE_FLAG):
+                        self.make_user_save_post(comment_author, parent_post)
+                        SAVE_FLAG = not SAVE_FLAG
+                    else:
+                        SAVE_FLAG = True
+                    
+                    self.make_user_follow_author(comment_author, parent_post.author)
 
                 comment_content = md.markdown(mdfy.markdownify(data_obj["body_html"], heading_style="ATX"))
                 if not parent_comment:
@@ -267,6 +269,16 @@ def make_api_call_for_users():
     # Counter: 55003
     MakeApiCall(f"{DEV_API}/users/64628")
 
+def set_password_of_all_users():
+    for pk in range(3,298):
+        try:
+            user = User.objects.get(pk=pk)
+            dummy_password = f"{os.getenv('DUMMY_PASSWORD_PREFIX')}{user.username}" 
+            user.set_password(dummy_password)
+            user.save()
+            print(f"Password set success of {user.username}")
+        except:
+            print(f"Password set failed of {pk}")
 
 def run():
     # make_api_call_for_users()
