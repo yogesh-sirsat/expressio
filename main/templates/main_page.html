@@ -10,79 +10,37 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         {% if user.is_authenticated %}
-                            <button class="nav-link" id="following-authors-posts-tab" data-bs-toggle="tab" data-bs-target="#following-authors-posts" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
+                            <button class="nav-link posts-tab" id="following-authors-posts-tab" data-bs-toggle="tab" data-bs-target="#following-authors-posts" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
                         {% else %}
                             <button class="nav-link" data-bs-toggle="modal" data-bs-target="#signInModal" type="button" role="tab" aria-controls="following-authors-posts" aria-selected="false">Following</button>
                         {% endif %}
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="global-posts-tab" data-bs-toggle="tab" data-bs-target="#global-posts" type="button" role="tab" aria-controls="global-posts" aria-selected="true">Global</button>
+                        <button class="nav-link posts-tab active" id="global-posts-tab" data-bs-toggle="tab" data-bs-target="#global-posts" type="button" role="tab" aria-controls="global-posts" aria-selected="true">Global</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active mt-2" id="global-posts" role="tabpanel" aria-labelledby="global-posts-tab">
-                        <div class="row">
-                            {% for post in all_posts %}
-                                <div class="col-md-12 mb-2">
-                                    <div class="card">
-
-                                        {% include "includes/post_item_card.html" %}
-
-                                    </div>
-                                </div>
-                            {% endfor %}
+                        <div class="row justify-content-center">
+                        {% if not is_global_posts_exists %}
+                            <h4 class="post-title">Nothing To Show Here For Now, Come Again Later</h2>
+                        {% else %}
+                        <article>
+                        </article>
+                        <h4>Yepp, you catched up all posts!</h4>
+                        {% endif %}
                         </div>
-{# For the future pending use #}
-{#                    <div class="pagination">#}
-{#                        <span class="step-links">#}
-{#                            {% if all_posts.has_previous %}#}
-{#                                <a href="?gp-page=1">&laquo; first</a>#}
-{#                                <a href="?gp-page={{ all_posts.previous_page_number }}">previous</a>#}
-{#                            {% endif %}#}
-{##}
-{#                            <span class="current">#}
-{#                                Page {{ all_posts.number }} of {{ all_posts.paginator.num_pages }}.#}
-{#                            </span>#}
-{##}
-{#                            {% if all_posts.has_next %}#}
-{#                                <a href="?gp-page={{ all_posts.next_page_number }}">next</a>#}
-{#                                <a href="?gp-page={{ all_posts.paginator.num_pages }}">last &raquo;</a>#}
-{#                            {% endif %}#}
-{#                        </span>#}
-{#                    </div>#}
                     </div>
                     <div class="tab-pane fade mt-2" id="following-authors-posts" role="tabpanel" aria-labelledby="following-authors-posts-tab">
-                  {% if following_authors_posts.count == 0 %}
-                      <h2 class="post-title">Nothing To Show Here For Now, Follow More Authors Or Come Again Later</h2>
-                  {% else %}
-                      <div class="row justify-content-center">
-                            {% for post in following_authors_posts %}
-                                <div class="col-md-12 mb-2">
-                                    <div class="card">
-                                        {% include "includes/post_item_card.html" %}
-                                    </div>
-                                </div>
-                            {% endfor %}
+                        <div class="row justify-content-center">
+                        {% if not is_following_authors_posts_exists %}
+                            <h4 class="post-title">Nothing To Show Here For Now, Follow More Authors Or Come Again Later</h4>
+                        {% else %}
+                        <article>
+                        </article>
+                        <h4>Yepp, you catched up all posts of following authors!</h4>
+                        {% endif %}
                         </div>
-                  {% endif %}
-{# For the future pending use #}
-{#                      <div class="pagination">#}
-{#                            <span class="step-links">#}
-{#                                {% if following_authors_posts.has_previous %}#}
-{#                                    <a href="?fp-page=1">&laquo; first</a>#}
-{#                                    <a href="?fp-page={{ following_authors_posts.previous_page_number }}">previous</a>#}
-{#                                {% endif %}#}
-{##}
-{#                                <span class="current">#}
-{#                                    Page {{ following_authors_posts.number }} of {{ following_authors_posts.paginator.num_pages }}.#}
-{#                                </span>#}
-{##}
-{#                                {% if following_authors_posts.has_next %}#}
-{#                                    <a href="?fp-page={{ following_authors_posts.next_page_number }}">next</a>#}
-{#                                    <a href="?fp-page={{ following_authors_posts.paginator.num_pages }}">last &raquo;</a>#}
-{#                                {% endif %}#}
-{#                            </span>#}
-{#                       </div>#}
                   </div>
                 </div>
             <hr class="mb-6">
@@ -140,7 +98,7 @@
 {% endblock %}
 {% block footer %}{% endblock %}
 {% block script %}
-    <script src="{% static 'js/main_page.js' %}"></script>
+    <!-- <script src="{% static 'js/main_page.js' %}"></script> -->
     <script src="{% static 'js/feed_view.js' %}"></script>
     <script src="{% static 'js/post_response.js' %}"></script>
 {% endblock %}

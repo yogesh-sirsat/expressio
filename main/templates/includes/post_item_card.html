@@ -1,82 +1,85 @@
-<div class="post_item">
-    {% if post.thumbnail %}
-        <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
-    {% endif %}
-    <div class="card-body">
-        {% if is_search_result %}
-            <h5 class="card-title post-title">{{ post.title_headline|safe|title }}</h5>
-            <p class="card-text post-description">
-                {{ post.description_headline|safe }}
-                <br>
-                {{ post.content_headline|safe }}
-            </p>
-        {% else %}
-            <h5 class="card-title post-title">{{ post.title|title }}</h5>
-            {% if post.description %}
-            <p class="card-text post-description">
-                {{ post.description|safe }}
-            </p>
+<div class="col-md-12 mb-2">
+    <div class="card">
+        <div class="post_item">
+            {% if post.thumbnail %}
+                <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
             {% endif %}
-        {% endif %}
-        <div class="row">
-            {% if post.tags %}
-                <div class="hstack post_tags gap-1 mt-1">
-                    {% for tag in post.tags.all %}
-                    <a class="tag_slug" href="/tag/{{ tag.slug }}"><small class="tag border">{{ tag.name }}</small></a>
-                    {% endfor %}
+            <div class="card-body">
+                {% if is_search_result %}
+                    <h5 class="card-title post-title">{{ post.title_headline|safe|title }}</h5>
+                    <p class="card-text post-description">
+                        {{ post.description_headline|safe }}
+                        <br>
+                        {{ post.content_headline|safe }}
+                    </p>
+                {% else %}
+                    <h5 class="card-title post-title">{{ post.title|title }}</h5>
+                    {% if post.description %}
+                    <p class="card-text post-description">
+                        {{ post.description|safe }}
+                    </p>
+                    {% endif %}
+                {% endif %}
+                <div class="row">
+                    {% if post.tags %}
+                        <div class="hstack post_tags gap-1 mt-1">
+                            {% for tag in post.tags.all %}
+                            <a class="tag_slug" href="/tag/{{ tag.slug }}"><small class="tag border">{{ tag.name }}</small></a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+                <a class="post_link" href="/{{ post.author.username }}/{{ post.slug }}"></a>
+            </div>
         </div>
-        <a class="post_link" href="/{{ post.author.username }}/{{ post.slug }}"></a>
+        <div class="card-footer" style="background-color: white">
+        {# Post Star and Save Status Section #}
+        
+            <div class="row justify-content-start" postId="{{ post.id }}">
+                <div class="col-auto fs-6" >
+                    {% if user.is_authenticated %}
+                        {% csrf_token %}
+                        <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
+                           
+                        </i>
+                        <small class="post-response post-response-star">
+                            {{ post.get_total_stars }}
+                        </small>
+                        
+                     {% else %}
+                        <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                        <small class="post-response">
+                            {{ post.get_total_stars }}
+                        </small>
+                    {% endif %}
+                </div>
+                <div class="col-auto post-response fs-6">
+                    {% if user.is_authenticated %}
+                        {% csrf_token %}
+                        <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
+                           
+                        </i>
+                        <small class="post-response post-response-save">
+                            {{ post.get_total_saves }}
+                        </small>
+                        
+                     {% else %}
+                        <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
+                        <small class="post-response">
+                            {{ post.get_total_saves }}
+                        </small>
+                    {% endif %}
+                </div>
+                <div class="col-auto post-response fs-6">
+                    <a class="comment_post" href="/{{post.author.username}}/{{post.slug}}#comments-section">
+                        <i class="bi bi-chat">
+                        </i>
+                    </a>
+                    <small class="post-response post-response-save">
+                        {{ post.comments.count }}
+                    </small>
+                </div>
+            </div>
+         </div>
     </div>
 </div>
-<div class="card-footer" style="background-color: white">
-{# Post Star and Save Status Section #}
-
-    <div class="row justify-content-start" postId="{{ post.id }}">
-        <div class="col-auto fs-6" >
-            {% if user.is_authenticated %}
-                {% csrf_token %}
-                <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
-                   
-                </i>
-                <small class="post-response post-response-star">
-                    {{ post.get_total_stars }}
-                </small>
-                
-             {% else %}
-                <i class="bi bi-star" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
-                <small class="post-response">
-                    {{ post.get_total_stars }}
-                </small>
-            {% endif %}
-        </div>
-        <div class="col-auto post-response fs-6">
-            {% if user.is_authenticated %}
-                {% csrf_token %}
-                <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
-                   
-                </i>
-                <small class="post-response post-response-save">
-                    {{ post.get_total_saves }}
-                </small>
-                
-             {% else %}
-                <i class="bi bi-save" data-bs-toggle="modal" data-bs-target="#signInModal"></i>
-                <small class="post-response">
-                    {{ post.get_total_saves }}
-                </small>
-            {% endif %}
-        </div>
-        <div class="col-auto post-response fs-6">
-            <a class="comment_post" href="/{{post.author.username}}/{{post.slug}}#comments-section">
-                <i class="bi bi-chat">
-                </i>
-            </a>
-            <small class="post-response post-response-save">
-                {{ post.comments.count }}
-            </small>
-        </div>
-    </div>
-
- </div>

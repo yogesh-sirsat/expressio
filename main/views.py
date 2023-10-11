@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.loader import render_to_string
@@ -18,33 +18,48 @@ from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVe
 from django.contrib.postgres.search import TrigramSimilarity
 
 
+def get_paginated_posts(request):
+    items_per_page = 20
+    page = request.GET.get('page')
+    post_type = request.GET.get('posts_type', 'global')  # Default to 'global' if not provided
+
+    user = request.user
+    if post_type != 'global' and not user.is_authenticated:
+        return JsonResponse({'rendered_posts': ''})
+
+    queryset = Post.objects.filter(status="published")
+    if post_type != 'global':
+        queryset = queryset.filter(author__in=user.followings.all().values_list('following'))
+
+    paginator = Paginator(queryset, items_per_page)
+
+    try:
+        current_page = paginator.page(page)
+    except EmptyPage:
+        return JsonResponse({'rendered_posts': ''})
+
+    # Render the data in a template
+    rendered_posts = render_to_string('includes/rendered_posts.html', { 'posts': current_page })
+    return JsonResponse({'rendered_posts': rendered_posts})
+
 def home(request):
-    all_posts = Post.objects.filter(status="published")
+    
     user = request.user
 
     who_to_follow = User.objects.annotate(count=Count("followers")).order_by("-count")[:5]
 
     most_contributors = User.objects.annotate(count=Count("posts")).order_by("-count")[:5]
 
-    # for the future pending work
-    # all_posts_paginator = Paginator(all_posts, 2)
-    # following_authors_posts_paginator = Paginator(following_authors_posts,2)
-    #
-    # gp_page_number = request.GET.get('gp-page')
-    # fp_page_number = request.GET.get('fp-page')
-    #
-    # all_posts = all_posts_paginator.get_page(gp_page_number)
-    # following_authors_posts = following_authors_posts_paginator.get_page(fp_page_number)
-
     context = {
-        'all_posts': all_posts,
+        'is_global_posts_exists': Post.objects.filter(status="published").exists(),
         'who_to_follow': who_to_follow,
         'most_contributors': most_contributors,
     }
 
     if request.user.is_authenticated:
-        following_authors_posts = all_posts.filter(author__in=user.followings.all().values_list('following'))
-        context['following_authors_posts'] = following_authors_posts
+        context['is_following_authors_posts_exists'] = Post.objects.filter(
+            status="published", author__in=user.followings.all().values_list('following', flat=True)
+        ).exists()
 
     return render(request, 'main_page.html', context)
 
