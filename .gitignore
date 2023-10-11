@@ -20,7 +20,7 @@ static/summernote
 static/
 
 # Environments 
-expvenv/    
+venv/    
 
 # If you are using PyCharm # 
 # User-specific stuff
