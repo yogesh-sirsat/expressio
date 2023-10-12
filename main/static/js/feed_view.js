@@ -48,9 +48,7 @@ $(document).ready(async function () {
 
     $(window).on('scroll', function() {
         let active_posts_tab = $("#myTab .posts-tab.active").attr("id");
-        console.log(active_posts_tab);
         if (hasReachedBottom(active_posts_tab)) {
-            console.log("trueeeeeeeee");
             if (active_posts_tab === "global-posts-tab") {
                 loadMorePosts("global");
             } else {
