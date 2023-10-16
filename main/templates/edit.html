@@ -6,7 +6,6 @@
         Edit | {{ user.username }}
     {% endblock %}
   {% block head %}
-    {{ edit_post.media }}
     <link rel="stylesheet"
     href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/atom-one-dark-reasonable.min.css">
   {% endblock head %}
@@ -23,8 +22,10 @@
 
                     <div class="col-12">
                       <label for="thumbnail">Thumbnail</label>
-                      <p>Current: <a href="/media/{{ post.thumbnail }}">{{ post.thumbnail_name }}</a> </p>
-                      <input class="form-control" type="file" id="thumbnail" name="thumbnail" src="/media/{{ post.thumbnail }}" accept="image/*">
+                      {% if post.thumbnail %}
+                        <p>Current: <a href="{{ post.thumbnail.url }}">{{ post.thumbnail_name }}</a> </p>
+                      {% endif %}
+                      <input class="form-control" type="file" id="thumbnail" name="thumbnail" accept="image/*">
                     </div>
                     
                     <div class="col-12">
@@ -59,5 +60,7 @@
 
 {% block footer %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://expressio-s3.s3.ap-south-1.amazonaws.com/tinymce/tinymce.min.js"></script>
+<script src="https://expressio-s3.s3.ap-south-1.amazonaws.com/django_tinymce/init_tinymce.js"></script>
 <script>hljs.highlightAll();</script>
 {% endblock %}

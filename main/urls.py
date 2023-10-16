@@ -5,6 +5,8 @@ from expressio import settings
 from django.views.static import serve
 from main import views
 
+import os
+
 urlpatterns = [
   path('', views.home, name='home'),
   path('signup', views.sign_up_user, name='sign_up_user'),
@@ -30,4 +32,6 @@ urlpatterns = [
   path('<str:username>/<slug:slug>/reply-comment', views.reply_comment, name='reply_comment'),
   path('api/', include('main.api.urls', namespace='main_api')),
 
-] + static(settings.base.MEDIA_URL, document_root=settings.base.MEDIA_ROOT)
+]
+if os.getenv('USE_AWS_S3') != 'True':
+  urlpatterns += static(settings.base.MEDIA_URL, document_root=settings.base.MEDIA_ROOT)

@@ -12,7 +12,7 @@
             <div class="py-5 div-avatar text-center">
 {#                <div class="profile-avatar" style="background-image: url({% static 'daredevil.jpg' %})"></div>#}
 
-                <img class="avatar mb-4" alt="user-profile" src="/media/{{ user.profile.avatar }}">
+                <img class="avatar mb-4" alt="user-profile" src="{{ user.profile.avatar.url }}">
                 <h2>{{ user.username }}</h2>
             </div>
 

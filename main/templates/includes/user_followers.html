@@ -12,7 +12,7 @@
               <div class="row justify-content-start">
                 {% for follow_ralation in author.followers.all %}
                     <div class="col-md-auto">
-                        <img class="rounded-circle user-avatar" alt="user-avatar" src="/media/{{ follow_ralation.follower.profile.avatar }}" height="36" width="36"
+                        <img class="rounded-circle user-avatar" alt="user-avatar" src="{{ follow_ralation.follower.profile.avatar.url }}" height="36" width="36"
                              data-holder-rendered="true" href="/{{ follow_ralation.follower.username }}">
                     </div>
                     <div class="col">

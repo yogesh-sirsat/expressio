@@ -20,7 +20,7 @@ def get_random_default_avatar_url_for(username):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='user_profile/avatar', null=True)
+    avatar = ResizedImageField(size=(360, 360), crop=['middle', 'center'], upload_to='media/user_profile/avatar', null=True)
     avatar_url = models.URLField(null=True, blank=True)
     bio = models.TextField(max_length=500, default="", blank=True)
 
@@ -78,7 +78,7 @@ class Post(models.Model):
     published = models.DateTimeField(default=timezone.now)
     lastEdited = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=options, default='published')
-    thumbnail = ResizedImageField(size=(1280, 720), upload_to='posts/thumbnails', blank=True, null=True)
+    thumbnail = ResizedImageField(size=(1280, 720), upload_to='media/posts/thumbnails', blank=True, null=True)
     thumbnail_url = models.URLField(blank=True, null=True)
     stars = models.ManyToManyField(User, related_name='post_stars', blank=True)
     saves = models.ManyToManyField(User, related_name='post_saves', blank=True)

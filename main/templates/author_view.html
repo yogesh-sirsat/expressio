@@ -16,7 +16,7 @@
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="col-md-12">
                         <div class="">
-                            <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar" src="/media/{{ author.profile.avatar }}">
+                            <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar" src="{{ author.profile.avatar.url }}">
                         </div>
                         <div class="col-md-12">
                             <h5 class="author-name text-center">
@@ -81,7 +81,7 @@
                         <div class="post">
                             <h2 class="post-title">{{ post.title|title }}</h2>
                             {% if post.thumbnail %}
-                                <img src="/media/{{ post.thumbnail }}" class="post-thumbnail img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                                <img src="{{ post.thumbnail.url }}" class="post-thumbnail img-fluid mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
                             {% endif %}
                             {% if post.description %}
                             <p class="post-description mt-2">{{ post.description|safe }}</p>

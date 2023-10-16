@@ -13,7 +13,7 @@
                 {% for follow_reletion in author.followings.all %}
                     <div class="col-md-auto">
                       <a href="/{{ follow_reletion.following.username }}">
-                        <img class="rounded-circle user-avatar" alt="user-avatar" src="/media/{{ follow_reletion.following.profile.avatar }}" height="36" width="36"
+                        <img class="rounded-circle user-avatar" alt="user-avatar" src="{{ follow_reletion.following.profile.avatar.url }}" height="36" width="36"
                              data-holder-rendered="true">
                       </a>
                     </div>

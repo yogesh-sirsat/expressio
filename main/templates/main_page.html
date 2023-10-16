@@ -55,7 +55,7 @@
                                 {% for author in who_to_follow %}
                                 <div class="col-2 ">
                                     <a href="/{{ author.username }}">
-                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
+                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="{{ author.profile.avatar.url }}" height="42" width="42"
                                         data-holder-rendered="true">
                                     </a>
                                 </div>
@@ -76,7 +76,7 @@
                                 {% for author in most_contributors %}
                                 <div class="col-2 ">
                                     <a href="/{{ author.username }}">
-                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="/media/{{ author.profile.avatar }}" height="42" width="42"
+                                        <img class="rounded-circle author-avatar mb-3" alt="author-avatar" src="{{ author.profile.avatar.url }}" height="42" width="42"
                                         data-holder-rendered="true">
                                     </a>
                                 </div>

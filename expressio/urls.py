@@ -20,14 +20,19 @@ from django.views.static import serve
 
 from expressio import settings
 
+import os
+
 urlpatterns = [
     path('', include('main.urls')),
     path('admin/manage/dashboard', admin.site.urls),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    re_path(r'^media/(?P<path>.*)$', serve,
-            {'document_root': settings.base.MEDIA_ROOT}),
-    re_path(r'^static/(?P<path>.*)$', serve,
-            {'document_root': settings.base.STATIC_ROOT}),
     path('tinymce/', include('tinymce.urls')),
 
 ]
+if os.getenv('USE_AWS_S3') != 'True':
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve,
+            {'document_root': settings.base.MEDIA_ROOT}),
+        re_path(r'^static/(?P<path>.*)$', serve,
+            {'document_root': settings.base.STATIC_ROOT}),
+    ]

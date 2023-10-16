@@ -23,7 +23,7 @@
                     <h1 class="post-title">{{ post.title|capfirst }}</h1>
                     <div class="author_info row">
                         <div class="author_avatar col-sm-auto">
-                           ~ <img src="/media/{{post.author.profile.avatar}}" height="36" width="36"
+                           ~ <img src="{{post.author.profile.avatar.url}}" height="36" width="36"
                         style="border: 1px solid black; border-radius: 18px" />
                         </div>
                         <div class="col">
@@ -45,12 +45,12 @@
                     {% endif %}
                     {% if post.source %}
                         {% if post.thumbnail %}
-                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            <img src="{{ post.thumbnail.url }}" class="img-fluid mt-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
                         {% endif %}
                         <p class="post_source mb-4">(Source/Credits: <a href="{{post.source}}">{{post.source|safe}}</a>)</P>
                     {% else %}
                         {% if post.thumbnail %}
-                            <img src="/media/{{ post.thumbnail }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
+                            <img src="{{ post.thumbnail.url }}" class="img-fluid mt-4 mb-4 mx-auto d-block" alt="post-{{ post.id }}-thumbnail">
                         {% endif %}
                     {% endif %}
 
@@ -66,7 +66,7 @@
                 <div class="position-sticky row">
                     <div>
                         <img class="author-avatar mb-4 mx-auto d-block" alt="author-avatar"
-                                src="/media/{{ author.profile.avatar }}" id="author-avatar" href="/{{ author.username }}">
+                                src="{{ author.profile.avatar.url }}" id="author-avatar" href="/{{ author.username }}">
                     </div>
                     <div>
                         <h5 class="author-name text-center" id="author-name" href="/{{ author.username }}">

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="post_item">
             {% if post.thumbnail %}
-                <img src="/media/{{ post.thumbnail }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
+                <img src="{{ post.thumbnail.url }}" role="button" class="card-img-top" alt="post-{{ post.id }}-thumbnail">
             {% endif %}
             <div class="card-body">
                 {% if is_search_result %}

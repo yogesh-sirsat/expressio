@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'tinymce',
     'taggit',
     'crispy_forms',
+    'storages',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -149,14 +150,38 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-STATIC_URL = '/static/'
+USE_AWS_S3 = os.getenv('USE_AWS_S3') == 'True'
 
-# Managing media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+if USE_AWS_S3:
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')
+    AWS_DEFAULT_REGION = os.getenv('AWS_DEFAULT_REGION')
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_DEFAULT_REGION)
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_DEFAULT_ACL = None
+    # s3 static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATIC_LOCATION)
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # s3 media settings
+    MEDIA_LOCATION = 'media'
+    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIA_LOCATION)
+    MEDIAFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+else:   
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/4.0/howto/static-files/
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+    STATIC_URL = '/static/'
+
+    # Managing media
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+    MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'main/static'),
