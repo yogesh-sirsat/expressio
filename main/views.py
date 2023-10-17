@@ -19,7 +19,7 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 
 def get_paginated_posts(request):
-    items_per_page = 20
+    items_per_page = 10
     page = request.GET.get('page')
     post_type = request.GET.get('posts_type', 'global')  # Default to 'global' if not provided
 

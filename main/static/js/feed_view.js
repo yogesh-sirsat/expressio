@@ -1,4 +1,4 @@
-$(document).ready(async function () {
+$(document).ready(function () {
 
     let globaL_posts_page = 1;
     let following_authors_posts_page = 1;
@@ -8,13 +8,18 @@ $(document).ready(async function () {
         let windowHeight = $(window).height();
         let documentHeight = $(document).height();
         let scrollTop = $(window).scrollTop();
-     
-        return windowHeight + scrollTop >= documentHeight - 200;
+
+        return (windowHeight + scrollTop) >= (documentHeight - 1000);
      }
-    async function loadMorePosts(posts_type) {
+    function loadMorePosts(posts_type) {
         if (!isLoading) {
+            if (posts_type === "global") {
+                $('#global-posts-bottom').html("Getting Posts...");
+            } else {
+                $('#following-authors-posts-bottom').html("Getting Posts...");
+            }
             isLoading = true;
-            await $.ajax({
+            $.ajax({
                 url: '/get_paginated_posts', 
                 type: 'GET',
                 data: {
@@ -30,6 +35,12 @@ $(document).ready(async function () {
                             $('#following-authors-posts article').append(data.rendered_posts);
                             following_authors_posts_page++;
                         }
+                    } else {
+                        if (posts_type === "global") {
+                            $('#global-posts-bottom').html("Yepp, you catched up all posts!");
+                        } else {
+                            $('#following-authors-posts-bottom').html("Yepp, you catched up all posts of following authors!");
+                        }
                     }
                     isLoading = false;
                     //redirect to post view when click on post title | thumbnail
@@ -43,8 +54,8 @@ $(document).ready(async function () {
     }
 
     // initial paosts load
-    await loadMorePosts("global");
-    await loadMorePosts("following-authors");
+    loadMorePosts("global");
+    loadMorePosts("following-authors");
 
     $(window).on('scroll', function() {
         let active_posts_tab = $("#myTab .posts-tab.active").attr("id");
