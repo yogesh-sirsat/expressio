@@ -39,7 +39,7 @@ def get_paginated_posts(request):
         return JsonResponse({'rendered_posts': ''})
 
     # Render the data in a template
-    rendered_posts = render_to_string('includes/rendered_posts.html', { 'posts': current_page })
+    rendered_posts = render_to_string('includes/rendered_posts.html', { 'posts': current_page, 'user_is_authenticated': user.is_authenticated })
     return JsonResponse({'rendered_posts': rendered_posts})
 
 def home(request):

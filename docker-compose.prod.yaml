@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: expressio
+    container_name: expressio
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      - DEBUG_STATUS=True
+    expose:
+      - 8004
+    ports:
+      - "8004:8004"
+    command: sh -c "gunicorn --bind 0.0.0.0:8004 expressio.wsgi:application"

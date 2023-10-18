@@ -79,3 +79,7 @@ a:focus {
   padding-bottom: 0;
 }
 
+.card .bi {
+  cursor: pointer;
+}
+

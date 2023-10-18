@@ -1,3 +1,7 @@
 from .base import *
 
-ALLOWED_HOSTS = [os.getenv('IP_ADDRESS'), 'expressio.live' ,'localhost', '127.0.0.1']
+ALLOWED_HOSTS += ['expressio.yogeshsirsat.online']
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = ['https://expressio.yogeshsirsat.online']

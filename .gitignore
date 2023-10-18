@@ -42,4 +42,7 @@ venv/
 *.sublime-project
 
 # dotenv
-.env
+.env*
+
+data_backup.json
+db.json

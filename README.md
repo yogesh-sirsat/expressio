@@ -1,5 +1,10 @@
 # expressio
 
-An articles posting platform like medium and dev.to.
+**An articles publishing platform.**
 
-Visit at http://expressio.live to take a live look, use credentials `{username: deep75, password: Pass@user-deep75}` just for visiting purpose, for testing you can create new account with dummy details.
+Visit at https://expressio.yogeshsirsat.online to take a live look, use credentials `{username: jessekphillips, password: Pass@user-jessekphillips}` for testing, you can also create new account easily.
+
+
+This project uses data dev.to using theri API `https://dev.to/api` for just dummy/testing purposes, `scripts/create_test_data.py` file contains the code of this.
+
+*Used Tech*: Python(Django), Javascript(jQuery, ajax), Docker(containerization), PostgreSQL, AWS(EC2, ECR, S3, RDS) 

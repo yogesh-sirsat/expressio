@@ -37,7 +37,7 @@
         
             <div class="row justify-content-start" postId="{{ post.id }}">
                 <div class="col-auto fs-6" >
-                    {% if user.is_authenticated %}
+                    {% if user_is_authenticated %}
                         {% csrf_token %}
                         <i class="star-post bi bi-star" id="star" href="/{{post.author.username}}/{{post.slug}}/star-post">
                            
@@ -54,7 +54,7 @@
                     {% endif %}
                 </div>
                 <div class="col-auto post-response fs-6">
-                    {% if user.is_authenticated %}
+                    {% if user_is_authenticated %}
                         {% csrf_token %}
                         <i class="save-post bi bi-save" id="save" href="/{{post.author.username}}/{{post.slug}}/save-post">
                            

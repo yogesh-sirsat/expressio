@@ -8,6 +8,7 @@
 
 .post-response .comment_post {
     text-decoration: none;
+    cursor: pointer;
 }
 
 #right-side-bar {

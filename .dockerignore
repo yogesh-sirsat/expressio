@@ -1,0 +1,11 @@
+.venv
+.git
+.gitignore
+.env
+*.json
+.dockerignore
+**/__pycache__
+*.pyc
+.env*
+/static/
+/media/

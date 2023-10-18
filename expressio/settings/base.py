@@ -36,7 +36,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG_STATUS', 'False') == 'True'
 
-ALLOWED_HOSTS = [os.getenv('IP_ADDRESS'), ]
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', os.getenv('IP_ADDRESS')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -82,10 +82,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS_ORIGIN_WHITELIST = (
-#     'localhost:3000',
-# )
-
 ROOT_URLCONF = 'expressio.urls'
 
 TEMPLATES = [
@@ -112,12 +108,12 @@ WSGI_APPLICATION = 'expressio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE'),
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -151,8 +147,9 @@ USE_I18N = True
 USE_TZ = True
 
 USE_AWS_S3 = os.getenv('USE_AWS_S3') == 'True'
+PRODUCTION_MODE = os.getenv('PRODUCTION_MODE') == 'True'
 
-if USE_AWS_S3:
+if USE_AWS_S3 or PRODUCTION_MODE:
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_NAME')

@@ -7,7 +7,7 @@ import requests
 from main.models import *
 
 DEV_API = "https://dev.to/api"
-ADMIN_USER = User.objects.get(pk=1)
+ADMIN_USER = User.objects.get(username="superuser")
 
 # Creating test data from dev.to api's instead of lorem ipsum data just to give small real touch to
 # whoever browsing the project, this data from dev.to is not getting used for any traffic or ads, its
@@ -251,11 +251,11 @@ class MakeApiCall:
 def make_api_call_for_articles():
     # Make api call for articles.
 
-    # Counter: 150589 - 150740, 160740 -  160809
-    # Prod counter: 160812 - 161046
+    # Counter: 150589 - 150740, 160740 -  161197
+    # Prod counter: 160812 - 161046, 161100 - 161200
     SAVE_FLAG = True
     init_count = ARTICLE_COUNTER
-    article_id =  160810
+    article_id =  161198
     while ARTICLE_COUNTER:
         MakeApiCall(f"{DEV_API}/articles/{article_id}")
         article_id += 1

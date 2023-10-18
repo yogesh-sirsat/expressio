@@ -98,8 +98,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
                 <form class="needs-validation" action="/signup" method="post">
-                    {% csrf_token %}
-
+                  {% csrf_token %}
                   <div class="modal-body">
                         <div class="form-group">
                             <label for="username" class="col-form-label">Username</label>
@@ -133,8 +132,6 @@
                             <input type="hidden" name="next" value="{{ request.path }}">
                           </div>
                    </div>
-                    {% csrf_token %}
-
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-outline-dark">Sign Up</button>
                   </div>
@@ -154,7 +151,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
                 <form action="/signin" method="post">
-
+                  {% csrf_token %}
                   <div class="modal-body">
                         <div class="form-group">
                             <label for="signInUsername" class="col-form-label">Username</label>
@@ -167,7 +164,6 @@
                       <div class="form-group">
                         <input type="hidden" name="next" value="{{ request.path }}">
                       </div>
-                      {% csrf_token %}
                    </div>
                   <div class="modal-footer">
                     <a class="nav-link" role="button" style="color: gray" data-bs-toggle="modal" data-bs-target="#signUpModal">Get Started</a>

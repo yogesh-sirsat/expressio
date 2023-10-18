@@ -24,7 +24,7 @@ import os
 
 urlpatterns = [
     path('', include('main.urls')),
-    path('admin/manage/dashboard', admin.site.urls),
+    path(os.getenv('ADMIN_DASHBOARD_URL', 'admin'), admin.site.urls),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('tinymce/', include('tinymce.urls')),
 
