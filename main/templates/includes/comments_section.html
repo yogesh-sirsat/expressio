@@ -1,6 +1,6 @@
 <div class="comments_section" id="comments-section">
     <h3>Comments section</h3>
-    <div class="comment_form_wrapper container-fluid">
+    <div class="comment_form_wrapper">
         <form class="comment_form" method="post">
             <div>
                 <label for="comment_box" class="form-label"></label>
@@ -9,10 +9,10 @@
             </div>
             {% csrf_token %} 
             {% if user.is_authenticated %}
-            <button class="btn btn-outline-dark mt-2 post_comment" type="submit" data-post-id="{{ post.id }}">Post</button>
+            <button class="btn btn-outline-dark mt-2 post_comment" type="submit" data-post-id="{{ post.id }}">Comment</button>
             {% else %}
             <a role="button" class="btn btn-outline-dark mt-2" data-bs-toggle="modal" data-bs-target="#signInModal">
-                Post
+                Comment
             </a>
             {% endif %}
         </form>
