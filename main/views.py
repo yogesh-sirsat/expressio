@@ -39,8 +39,8 @@ def get_paginated_posts(request):
         return JsonResponse({'rendered_posts': ''})
 
     # Render the data in a template
-    rendered_posts = render_to_string('includes/rendered_posts.html', { 'posts': current_page, 'user_is_authenticated': user.is_authenticated })
-    return JsonResponse({'rendered_posts': rendered_posts})
+    rendered_posts = render_to_string('includes/rendered_posts.html', { 'posts': current_page, 'user_is_authenticated': user.is_authenticated }, request=request)
+    return JsonResponse({'rendered_posts': rendered_posts, 'has_next_page': current_page.has_next()})
 
 def home(request):
     
@@ -56,9 +56,9 @@ def home(request):
         'most_contributors': most_contributors,
     }
 
-    if request.user.is_authenticated:
+    if user.is_authenticated:
         context['is_following_authors_posts_exists'] = Post.objects.filter(
-            status="published", author__in=user.followings.all().values_list('following', flat=True)
+            status="published", author__in=user.followings.all().values_list('following')
         ).exists()
 
     return render(request, 'main_page.html', context)
