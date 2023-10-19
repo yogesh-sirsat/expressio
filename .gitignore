@@ -9,14 +9,7 @@ main/api/__pycache__
 main/api/migrations/__pycache__
 media/
 backup_files/
-# db.sqlite3
 
-# Third-party apps #
-static/ckeditor
-static/admin
-static/rest_framework
-static/django_extensions
-static/summernote
 static/
 
 # Environments 
