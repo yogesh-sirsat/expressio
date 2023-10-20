@@ -1,0 +1,60 @@
+services:
+  expressio:
+    image: 641639050119.dkr.ecr.eu-central-1.amazonaws.com/expressio:latest
+    container_name: Expressio-App
+    env_file:
+      - ../expressio/.env.prod
+    restart: unless-stopped
+    expose:
+      - 8004
+    environment:
+      - VIRTUAL_HOST=expressio.yogeshsirsat.online
+      - VIRTUAL_PORT=8004
+      - LETSENCRYPT_HOST=expressio.yogeshsirsat.online
+    networks:
+      - Webdev-Network
+    command: sh -c "gunicorn --bind 0.0.0.0:8004 expressio.wsgi:application"
+
+  nginx-proxy-server:
+    image: nginxproxy/nginx-proxy:alpine
+    container_name: nginx-proxy-server
+    environment:
+      - ENABLE_IPV6=true
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - expressio
+    networks:
+      - Webdev-Network
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    environment:
+      - DEFAULT_EMAIL=yogeshsirsat09@gmail.com
+    volumes_from:
+      - nginx-proxy-server
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - Webdev-Network
+
+volumes:
+  conf:
+  vhost:
+  html:
+  certs:
+  acme:
+
+networks:
+  Webdev-Network:
