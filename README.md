@@ -7,4 +7,6 @@ Visit at https://expressio.yogeshsirsat.online to take a live look, use credenti
 
 This project uses data dev.to using theri API `https://dev.to/api` for just dummy/testing purposes, `scripts/create_test_data.py` file contains the code of this.
 
-*Used Tech*: Python(Django), Javascript(jQuery, ajax), Docker(containerization), PostgreSQL, AWS(EC2, ECR, S3, RDS) 
+*Used Tech*: Python(Django), Javascript(jQuery, ajax), Docker(containerization), PostgreSQL, AWS(EC2, ECR, S3, RDS)
+
+[View screenshots](https://1drv.ms/f/s!AljPuC-a7vuNp03dngRCyqyaf7C9?e=1cANwU)
